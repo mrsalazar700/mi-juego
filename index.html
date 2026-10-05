@@ -3163,10 +3163,27 @@ function saveGame() {
 
     try {
 
+        const serializedSave =
+            JSON.stringify(saveData);
+
         localStorage.setItem(
             SAVE_KEY,
-            JSON.stringify(saveData)
+            serializedSave
         );
+
+        /*
+           Verificamos inmediatamente que el guardado
+           haya quedado realmente escrito.
+           No cambia la clave ni la estructura del guardado.
+        */
+        const savedCheck =
+            localStorage.getItem(SAVE_KEY);
+
+        if (savedCheck !== serializedSave) {
+            console.warn(
+                "El guardado de ARENA'S no pudo ser verificado."
+            );
+        }
 
     } catch (error) {
 
@@ -3388,9 +3405,34 @@ function loadGame() {
 
 }
 
+loadGame();
 loadSeasonProgress();
 updateSeasonDisplay();
 updateCharacterVisuals();
+
+/*
+   Al cargar, actualizamos inmediatamente los datos visibles.
+   Esto NO guarda ni modifica el progreso; solamente refleja
+   en pantalla lo que acabamos de recuperar.
+*/
+pearls.textContent =
+    "Perlas: " + pearlsAmount;
+
+profileMedallions.textContent =
+    medallionsAmount;
+
+/*
+   Guardado de seguridad al salir de la página/app.
+   Usa exactamente el mismo saveGame() y la misma estructura.
+*/
+window.addEventListener("pagehide", saveGame);
+window.addEventListener("beforeunload", saveGame);
+
+document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") {
+        saveGame();
+    }
+});
 
 /* ================= SPLASH ================= */
 
