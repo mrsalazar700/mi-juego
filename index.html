@@ -4385,20 +4385,53 @@ function killEnemy(enemy) {
 
 async function entrarOrientacionGameplay() {
 
+    /* PRUEBA TEMPORAL DE ORIENTACION:
+       1) intenta pantalla completa,
+       2) intenta la API moderna,
+       3) si WebView no la ofrece, prueba la API antigua.
+       No modifica el sistema de guardado. */
+
     try {
         if (document.documentElement.requestFullscreen && !document.fullscreenElement) {
             await document.documentElement.requestFullscreen();
         }
     } catch (error) {
-        console.warn("No se pudo activar pantalla completa para la orientación.", error);
+        console.warn("PRUEBA ORIENTACION: no se pudo activar pantalla completa.", error);
     }
 
+    let orientacionBloqueada = false;
+
+    // API moderna: Screen Orientation API
     try {
         if (screen.orientation && screen.orientation.lock) {
             await screen.orientation.lock("landscape");
+            orientacionBloqueada = true;
+            console.log("PRUEBA ORIENTACION: landscape bloqueado con la API moderna.");
         }
     } catch (error) {
-        console.warn("El dispositivo no permitió bloquear la orientación horizontal.", error);
+        console.warn("PRUEBA ORIENTACION: API moderna rechazada.", error);
+    }
+
+    // Fallback para WebView que exponga la API antigua
+    if (!orientacionBloqueada) {
+        try {
+            const lockOrientation =
+                screen.lockOrientation ||
+                screen.mozLockOrientation ||
+                screen.msLockOrientation ||
+                screen.webkitLockOrientation;
+
+            if (lockOrientation) {
+                orientacionBloqueada = lockOrientation.call(screen, "landscape");
+                console.log("PRUEBA ORIENTACION: se intento el metodo antiguo. Resultado:", orientacionBloqueada);
+            }
+        } catch (error) {
+            console.warn("PRUEBA ORIENTACION: fallback antiguo rechazado.", error);
+        }
+    }
+
+    if (!orientacionBloqueada) {
+        console.warn("PRUEBA ORIENTACION: WebView no permitio bloquear a horizontal desde JavaScript.");
     }
 
 }
