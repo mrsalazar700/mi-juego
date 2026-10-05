@@ -230,6 +230,147 @@ button {
     font-weight: bold;
 }
 
+/* ================= CONFIGURACION ================= */
+
+#settings-button {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    background: #55c7e8;
+    color: white;
+    border: 3px solid white;
+    border-radius: 12px;
+    font-size: 27px;
+    line-height: 1;
+    font-weight: bold;
+    z-index: 20;
+    box-shadow: 0 5px 0 rgba(0,0,0,0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#settings-panel {
+    position: fixed;
+    width: 430px;
+    max-width: 88%;
+    min-height: 300px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(145deg, #55c7e8 0%, #39a9cf 55%, #278bad 100%);
+    border: 5px solid white;
+    border-radius: 22px;
+    display: none;
+    z-index: 1000;
+    overflow: hidden;
+    box-shadow: 0 0 0 4px rgba(244, 208, 63, 0.9), 0 14px 35px rgba(0, 0, 0, 0.38), inset 0 0 28px rgba(255, 255, 255, 0.12);
+}
+
+#settings-panel::before {
+    content: '';
+    position: absolute;
+    inset: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.55);
+    border-radius: 15px;
+    pointer-events: none;
+}
+
+#settings-title {
+    margin: 34px 0 25px;
+    color: #f4d03f;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 27px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-align: center;
+    text-shadow: 2px 2px 0 #ffffff, 3px 3px 0 rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 2;
+}
+
+#close-settings {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    width: 42px;
+    height: 42px;
+    background: #e53935;
+    color: white;
+    border: 3px solid white;
+    border-radius: 10px;
+    font-size: 22px;
+    font-weight: bold;
+    z-index: 10;
+    box-shadow: 0 4px 0 #b71c1c, 0 5px 10px rgba(0, 0, 0, 0.25);
+}
+
+#settings-content {
+    position: relative;
+    z-index: 2;
+    padding: 0 30px 35px;
+}
+
+#language-button {
+    width: 100%;
+    background: #f4d03f;
+    color: white;
+    border: 3px solid white;
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: left;
+    box-shadow: 0 5px 0 rgba(174, 134, 0, 0.65);
+}
+
+#language-options {
+    display: none;
+    margin-top: 7px;
+    background: white;
+    border: 3px solid #f4d03f;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.language-option {
+    width: 100%;
+    background: white;
+    color: #278bad;
+    border: 0;
+    border-bottom: 1px solid #d9d9d9;
+    padding: 12px 16px;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: left;
+}
+
+.language-option:last-child {
+    border-bottom: 0;
+}
+
+.language-option.selected {
+    background: #e8f8fc;
+}
+
+#settings-button {
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+@media (max-width: 520px) {
+    #settings-panel {
+        min-height: 280px;
+    }
+
+    #settings-content {
+        padding-left: 22px;
+        padding-right: 22px;
+    }
+}
+
 /* ================= PERFIL ================= */
 
 #profile-panel {
@@ -259,7 +400,7 @@ button {
 }
 
 #profile-panel::after {
-    content: 'PERFIL';
+    content: attr(data-panel-title);
     position: absolute;
     top: 18px;
     left: 50%;
@@ -1713,6 +1854,10 @@ button {
 
 <div id="menu">
 
+    <button id="settings-button" type="button" aria-label="Configuración">
+        ⚙️
+    </button>
+
     <button id="profile-button">
         Perfil
     </button>
@@ -1752,6 +1897,35 @@ button {
     <button id="season-button">
         Temporada
     </button>
+
+</div>
+
+<!-- ================= CONFIGURACION ================= -->
+
+<div id="settings-panel">
+
+    <button id="close-settings" type="button">
+        X
+    </button>
+
+    <div id="settings-title">
+        Configuración
+    </div>
+
+    <div id="settings-content">
+        <button id="language-button" type="button">
+            Idioma
+        </button>
+
+        <div id="language-options">
+            <button class="language-option" data-language="es" type="button">
+                Español
+            </button>
+            <button class="language-option" data-language="en" type="button">
+                English
+            </button>
+        </div>
+    </div>
 
 </div>
 
@@ -2716,6 +2890,24 @@ const ranksButton =
 const inventoryButton =
     document.getElementById("inventory-button");
 
+const settingsButton =
+    document.getElementById("settings-button");
+
+const settingsPanel =
+    document.getElementById("settings-panel");
+
+const closeSettings =
+    document.getElementById("close-settings");
+
+const languageButton =
+    document.getElementById("language-button");
+
+const languageOptions =
+    document.getElementById("language-options");
+
+const languageOptionButtons =
+    document.querySelectorAll(".language-option");
+
 const ranksScreen =
     document.getElementById("ranks-screen");
 
@@ -2959,6 +3151,157 @@ const defeatScreen =
 const backMenuDefeat =
     document.getElementById("back-menu-defeat");
 
+/* ================= IDIOMA ================= */
+
+/*
+   El idioma se guarda en una clave SEPARADA del progreso principal.
+   Esto no modifica SAVE_KEY ni la estructura de ARENAS_SAVE_V1.
+*/
+const LANGUAGE_KEY = "ARENAS_LANGUAGE_V1";
+let currentLanguage = "es";
+
+const translations = {
+    "Debes escribir tu nombre de guerrero para continuar": "You must enter your warrior name to continue",
+    "Escribe tu nombre de guerrero": "Enter your warrior name",
+    "Continuar": "Continue",
+    "Perfil": "Profile",
+    "Perlas:": "Pearls:",
+    "Campaña": "Campaign",
+    "Mercado": "Market",
+    "Rangos": "Ranks",
+    "Inventario": "Inventory",
+    "Temporada": "Season",
+    "Configuración": "Settings",
+    "Idioma": "Language",
+    "Español": "Spanish",
+    "Nombre:": "Name:",
+    "Medallones:": "Medallions:",
+    "Rango:": "Rank:",
+    "Titulos:": "Titles:",
+    "FELICIDADES!": "CONGRATULATIONS!",
+    "SUBISTE DE RANGO": "YOU RANKED UP",
+    "Nuevo rango:": "New rank:",
+    "Consigue Medallones para subir de rango": "Earn Medallions to rank up",
+    "5 Medallones": "5 Medallions", "10 Medallones": "10 Medallions", "15 Medallones": "15 Medallions",
+    "150 Perlas": "150 Pearls", "200 Perlas": "200 Pearls", "300 Perlas": "300 Pearls",
+    "130 Perlas": "130 Pearls", "160 Perlas": "160 Pearls", "215 Perlas": "215 Pearls",
+    "20 Medallones": "20 Medallions", "25 Medallones": "25 Medallions", "40 Medallones": "40 Medallions",
+    "50 Medallones": "50 Medallions", "60 Medallones": "60 Medallions", "70 Medallones": "70 Medallions",
+    "80 Medallones": "80 Medallions", "90 Medallones": "90 Medallions", "100 Medallones": "100 Medallions",
+    "110 Medallones": "110 Medallions", "120 Medallones": "120 Medallions", "130 Medallones": "130 Medallions",
+    "150 Medallones": "150 Medallions", "200 Medallones": "200 Medallions", "250 Medallones": "250 Medallions",
+    "300 Medallones": "300 Medallions", "350 Medallones": "350 Medallions", "500 Medallones": "500 Medallions",
+    "700 Medallones": "700 Medallions",
+    "Dios": "God",
+    "Dios — Rango Máximo": "God — Max Rank",
+    "Principiante": "Beginner", "Principiante II": "Beginner II", "Principiante III": "Beginner III",
+    "Guerrero": "Warrior", "Guerrero II": "Warrior II", "Guerrero III": "Warrior III",
+    "Profesional": "Professional", "Profesional II": "Professional II", "Profesional III": "Professional III",
+    "Profesional IV": "Professional IV", "Profesional V": "Professional V",
+    "Heroe": "Hero", "Heroe II": "Hero II", "Heroe III": "Hero III", "Heroe IV": "Hero IV", "Heroe V": "Hero V",
+    "Semidios": "Demigod",
+    "Pieles": "Skins", "Armas": "Weapons",
+    "Cazador de Osos": "Bear Hunter", "Verano": "Summer", "Chico Timido": "Shy Boy",
+    "Puño": "Fist", "Espada": "Sword", "Pistola": "Pistol", "Hacha": "Axe", "Arco": "Bow",
+    "Bromista": "Joker", "Globo": "Balloon",
+    "Comprar": "Buy", "Obtenido": "Obtained", "Equipar": "Equip", "Equipado": "Equipped",
+    "Piel": "Skin", "Arma": "Weapon",
+    "TEMPORADA 1": "SEASON 1",
+    "PIEL DEL BROMISTA": "JOKER SKIN",
+    "ARMA DEL GLOBO": "BALLOON WEAPON",
+    "No tienes suficientes Perlas": "You don't have enough Pearls",
+    "Cargando...": "Loading...",
+    "Reanudar": "Resume", "Ir al menu": "Go to menu",
+    "Ganaste!": "You won!", "+1 Medallones": "+1 Medallion", "+50 Perlas": "+50 Pearls",
+    "Volver al menu": "Back to menu", "Perdiste": "You lost", "-1 Medallones": "-1 Medallion",
+    "+15 Perlas": "+15 Pearls",
+    "ARMA CONSEGUIDA: GLOBO": "WEAPON OBTAINED: BALLOON",
+    "VIDA": "HEALTH",
+    "PIEL CONSEGUIDA: BROMISTA": "SKIN OBTAINED: JOKER"
+};
+
+const originalTextByNode = new WeakMap();
+
+function tr(text) {
+    if (currentLanguage === "es") return text;
+    return translations[text] || text;
+}
+
+function trRank(rank) {
+    return tr(rank);
+}
+
+function applyStaticLanguage() {
+    document.documentElement.lang = currentLanguage === "en" ? "en" : "es";
+    profilePanel.dataset.panelTitle = tr("Perfil").toUpperCase();
+
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    let node;
+
+    while ((node = walker.nextNode())) {
+        if (node.parentElement && !["SCRIPT", "STYLE"].includes(node.parentElement.tagName)) {
+            nodes.push(node);
+        }
+    }
+
+    nodes.forEach(textNode => {
+        let original = originalTextByNode.get(textNode);
+        const current = textNode.textContent.trim();
+
+        if (!original && (translations[current] || Object.values(translations).includes(current))) {
+            original = Object.prototype.hasOwnProperty.call(translations, current) ? current : Object.keys(translations).find(key => translations[key] === current);
+            if (original) originalTextByNode.set(textNode, original);
+        }
+
+        if (!original) return;
+
+        const translated = tr(original);
+        const raw = textNode.textContent;
+        const leading = raw.match(/^\s*/)?.[0] || "";
+        const trailing = raw.match(/\s*$/)?.[0] || "";
+        textNode.textContent = leading + translated + trailing;
+    });
+
+    languageOptionButtons.forEach(button => {
+        button.classList.toggle("selected", button.dataset.language === currentLanguage);
+    });
+}
+
+function loadLanguage() {
+    try {
+        const savedLanguage = localStorage.getItem(LANGUAGE_KEY);
+        if (savedLanguage === "en" || savedLanguage === "es") currentLanguage = savedLanguage;
+    } catch (error) {
+        console.warn("No se pudo cargar el idioma de ARENA'S.", error);
+    }
+}
+
+function setLanguage(language) {
+    if (language !== "es" && language !== "en") return;
+    currentLanguage = language;
+
+    try {
+        localStorage.setItem(LANGUAGE_KEY, currentLanguage);
+    } catch (error) {
+        console.warn("No se pudo guardar el idioma de ARENA'S.", error);
+    }
+
+    applyStaticLanguage();
+    updateLanguageDependentTexts();
+}
+
+function updateLanguageDependentTexts() {
+    pearls.textContent = tr("Perlas:") + " " + pearlsAmount;
+    profileName.textContent = tr("Nombre:") + " " + playerName;
+    profileRank.textContent = trRank(currentRank);
+    rankUpRankName.textContent = trRank(currentRank);
+    updateSkinButtons();
+    updateWeaponButtons();
+    updateInventoryButtons();
+    updateSeasonDisplay();
+}
+
 /* ================= CALCULAR RANGO ================= */
 
 function getRankFromMedallions(amount) {
@@ -2994,7 +3337,7 @@ function updateRank() {
         );
 
     profileRank.textContent =
-        currentRank;
+        trRank(currentRank);
 
 }
 
@@ -3407,6 +3750,8 @@ function loadGame() {
 
 loadGame();
 loadSeasonProgress();
+loadLanguage();
+applyStaticLanguage();
 updateSeasonDisplay();
 updateCharacterVisuals();
 
@@ -3416,7 +3761,7 @@ updateCharacterVisuals();
    en pantalla lo que acabamos de recuperar.
 */
 pearls.textContent =
-    "Perlas: " + pearlsAmount;
+    tr("Perlas:") + " " + pearlsAmount;
 
 profileMedallions.textContent =
     medallionsAmount;
@@ -3468,7 +3813,7 @@ continueButton.addEventListener("click", () => {
     playerName = value;
 
     profileName.textContent =
-        "Nombre: " + playerName;
+        tr("Nombre:") + " " + playerName;
 
     saveGame();
 
@@ -3478,6 +3823,33 @@ continueButton.addEventListener("click", () => {
     menu.style.display =
         "block";
 
+});
+
+/* ================= CONFIGURACION ================= */
+
+settingsButton.addEventListener("click", () => {
+    menu.style.display = "block";
+    settingsPanel.style.display = "block";
+    languageOptions.style.display = "none";
+    applyStaticLanguage();
+});
+
+closeSettings.addEventListener("click", () => {
+    settingsPanel.style.display = "none";
+    languageOptions.style.display = "none";
+    menu.style.display = "block";
+});
+
+languageButton.addEventListener("click", () => {
+    languageOptions.style.display =
+        languageOptions.style.display === "block" ? "none" : "block";
+});
+
+languageOptionButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        setLanguage(button.dataset.language);
+        languageOptions.style.display = "none";
+    });
 });
 
 /* ================= PERFIL ================= */
@@ -3507,7 +3879,7 @@ function showRankUpMessage() {
         return;
 
     rankUpRankName.textContent =
-        currentRank;
+        trRank(currentRank);
 
     rankUpScreen.style.display =
         "flex";
@@ -3557,7 +3929,7 @@ closeRanks.onclick = function () {
 function updatePearls() {
 
     pearls.textContent =
-        "Perlas: " + pearlsAmount;
+        tr("Perlas:") + " " + pearlsAmount;
 
     saveGame();
 
@@ -3627,21 +3999,21 @@ function updateCharacterVisuals() {
 
 function updateSkinButtons() {
 
-    beginnerSkinButton.textContent = "Obtenido";
+    beginnerSkinButton.textContent = tr("Obtenido");
     beginnerSkinButton.classList.add("obtained");
     beginnerSkinButton.classList.remove("equipped");
 
-    bearSkinButton.textContent = skins.bearHunter.owned ? "Obtenido" : "Comprar";
+    bearSkinButton.textContent = skins.bearHunter.owned ? tr("Obtenido") : tr("Comprar");
     bearSkinButton.classList.toggle("obtained", skins.bearHunter.owned);
     bearSkinButton.classList.remove("equipped");
     bearSkinPrice.style.display = skins.bearHunter.owned ? "none" : "block";
 
-    summerSkinButton.textContent = skins.summer.owned ? "Obtenido" : "Comprar";
+    summerSkinButton.textContent = skins.summer.owned ? tr("Obtenido") : tr("Comprar");
     summerSkinButton.classList.toggle("obtained", skins.summer.owned);
     summerSkinButton.classList.remove("equipped");
     summerSkinPrice.style.display = skins.summer.owned ? "none" : "block";
 
-    shySkinButton.textContent = skins.shyBoy.owned ? "Obtenido" : "Comprar";
+    shySkinButton.textContent = skins.shyBoy.owned ? tr("Obtenido") : tr("Comprar");
     shySkinButton.classList.toggle("obtained", skins.shyBoy.owned);
     shySkinButton.classList.remove("equipped");
     shySkinPrice.style.display = skins.shyBoy.owned ? "none" : "block";
@@ -3653,26 +4025,26 @@ function updateSkinButtons() {
 
 function updateWeaponButtons() {
 
-    fistWeaponButton.textContent = "Obtenido";
+    fistWeaponButton.textContent = tr("Obtenido");
     fistWeaponButton.classList.add("obtained");
     fistWeaponButton.classList.remove("equipped");
 
-    swordButton.textContent = weapons.sword.owned ? "Obtenido" : "Comprar";
+    swordButton.textContent = weapons.sword.owned ? tr("Obtenido") : tr("Comprar");
     swordButton.classList.toggle("obtained", weapons.sword.owned);
     swordButton.classList.remove("equipped");
     swordPrice.style.display = weapons.sword.owned ? "none" : "block";
 
-    pistolButton.textContent = weapons.pistol.owned ? "Obtenido" : "Comprar";
+    pistolButton.textContent = weapons.pistol.owned ? tr("Obtenido") : tr("Comprar");
     pistolButton.classList.toggle("obtained", weapons.pistol.owned);
     pistolButton.classList.remove("equipped");
     pistolPrice.style.display = weapons.pistol.owned ? "none" : "block";
 
-    axeButton.textContent = weapons.axe.owned ? "Obtenido" : "Comprar";
+    axeButton.textContent = weapons.axe.owned ? tr("Obtenido") : tr("Comprar");
     axeButton.classList.toggle("obtained", weapons.axe.owned);
     axeButton.classList.remove("equipped");
     axePrice.style.display = weapons.axe.owned ? "none" : "block";
 
-    bowButton.textContent = weapons.bow.owned ? "Obtenido" : "Comprar";
+    bowButton.textContent = weapons.bow.owned ? tr("Obtenido") : tr("Comprar");
     bowButton.classList.toggle("obtained", weapons.bow.owned);
     bowButton.classList.remove("equipped");
     bowPrice.style.display = weapons.bow.owned ? "none" : "block";
@@ -3736,8 +4108,8 @@ function updateInventoryButtons() {
         button.style.display = owned ? "block" : "none";
         if (!owned) return;
         button.classList.remove("obtained");
-        const equipped = equippedSkin === id;
-        button.textContent = equipped ? "Equipado" : "Equipar";
+        const equipped = equippedSkin === id && !seasonEquippedSkin;
+        button.textContent = equipped ? tr("Equipado") : tr("Equipar");
         button.classList.toggle("equipped", equipped);
     });
 
@@ -3755,14 +4127,14 @@ function updateInventoryButtons() {
         if (!owned) return;
         button.classList.remove("obtained");
         const equipped = equippedWeapon === id && !seasonEquippedWeapon;
-        button.textContent = equipped ? "Equipado" : "Equipar";
+        button.textContent = equipped ? tr("Equipado") : tr("Equipar");
         button.classList.toggle("equipped", equipped);
     });
 
     inventorySeasonSkinItem.style.display = seasonSkinOwned ? "flex" : "none";
     if (seasonSkinOwned) {
         const equipped = seasonEquippedSkin === "seasonJoker";
-        inventorySeasonSkinButton.textContent = equipped ? "Equipado" : "Equipar";
+        inventorySeasonSkinButton.textContent = equipped ? tr("Equipado") : tr("Equipar");
         inventorySeasonSkinButton.classList.toggle("equipped", equipped);
         inventorySeasonSkinButton.classList.remove("obtained");
     }
@@ -3770,7 +4142,7 @@ function updateInventoryButtons() {
     inventorySeasonWeaponItem.style.display = seasonWeaponOwned ? "flex" : "none";
     if (seasonWeaponOwned) {
         const equipped = seasonEquippedWeapon === "seasonBalloon";
-        inventorySeasonWeaponButton.textContent = equipped ? "Equipado" : "Equipar";
+        inventorySeasonWeaponButton.textContent = equipped ? tr("Equipado") : tr("Equipar");
         inventorySeasonWeaponButton.classList.toggle("equipped", equipped);
         inventorySeasonWeaponButton.classList.remove("obtained");
     }
@@ -4191,7 +4563,7 @@ function updateLives() {
 /* ================= ENEMIGOS ================= */
 
 function spawnEnemy() {
-    if (gameFinished || gamePaused || enemies.length >= 3) return;
+    if (gameFinished || gamePaused || enemies.length >= 4) return;
 
     const side = Math.floor(Math.random() * 4);
     let x, y;
@@ -4213,7 +4585,7 @@ function spawnEnemy() {
         element: enemy,
         x,
         y,
-        speed: 0.52 + Math.random() * 0.14,
+        speed: 0.62 + Math.random() * 0.18,
         damageCooldownUntil: 0,
         damageTimer: null,
         waitingToDamage: false
@@ -4336,8 +4708,8 @@ function programarSpawn(min, max) {
             spawnEnemy();
 
             programarSpawn(
-                3000,
-                6000
+                2000,
+                4000
             );
 
         }, delay);
@@ -4385,53 +4757,20 @@ function killEnemy(enemy) {
 
 async function entrarOrientacionGameplay() {
 
-    /* PRUEBA TEMPORAL DE ORIENTACION:
-       1) intenta pantalla completa,
-       2) intenta la API moderna,
-       3) si WebView no la ofrece, prueba la API antigua.
-       No modifica el sistema de guardado. */
-
     try {
         if (document.documentElement.requestFullscreen && !document.fullscreenElement) {
             await document.documentElement.requestFullscreen();
         }
     } catch (error) {
-        console.warn("PRUEBA ORIENTACION: no se pudo activar pantalla completa.", error);
+        console.warn("No se pudo activar pantalla completa para la orientación.", error);
     }
 
-    let orientacionBloqueada = false;
-
-    // API moderna: Screen Orientation API
     try {
         if (screen.orientation && screen.orientation.lock) {
             await screen.orientation.lock("landscape");
-            orientacionBloqueada = true;
-            console.log("PRUEBA ORIENTACION: landscape bloqueado con la API moderna.");
         }
     } catch (error) {
-        console.warn("PRUEBA ORIENTACION: API moderna rechazada.", error);
-    }
-
-    // Fallback para WebView que exponga la API antigua
-    if (!orientacionBloqueada) {
-        try {
-            const lockOrientation =
-                screen.lockOrientation ||
-                screen.mozLockOrientation ||
-                screen.msLockOrientation ||
-                screen.webkitLockOrientation;
-
-            if (lockOrientation) {
-                orientacionBloqueada = lockOrientation.call(screen, "landscape");
-                console.log("PRUEBA ORIENTACION: se intento el metodo antiguo. Resultado:", orientacionBloqueada);
-            }
-        } catch (error) {
-            console.warn("PRUEBA ORIENTACION: fallback antiguo rechazado.", error);
-        }
-    }
-
-    if (!orientacionBloqueada) {
-        console.warn("PRUEBA ORIENTACION: WebView no permitio bloquear a horizontal desde JavaScript.");
+        console.warn("El dispositivo no permitió bloquear la orientación horizontal.", error);
     }
 
 }
@@ -4486,7 +4825,7 @@ seasonWeaponButton.addEventListener("click", () => {
 });
 
 function showSeasonRewardMessage(message) {
-    seasonRewardText.textContent = message;
+    seasonRewardText.textContent = tr(message);
     seasonRewardPopup.style.display = "flex";
 }
 
@@ -4620,8 +4959,8 @@ function iniciarPartida() {
     updateCharacterVisuals();
 
     programarSpawn(
-        2500,
-        4500
+        2000,
+        3500
     );
 
 }
@@ -4956,10 +5295,10 @@ resumeButton.addEventListener("click", () => {
             spawnTimerStart = Date.now();
             spawnTimeout = setTimeout(() => {
                 spawnEnemy();
-                programarSpawn(3000, 6000);
+                programarSpawn(2000, 4000);
             }, spawnTimerRemaining);
         } else {
-            programarSpawn(3000, 6000);
+            programarSpawn(2000, 4000);
         }
     }
 });
