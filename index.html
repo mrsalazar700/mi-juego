@@ -360,6 +360,55 @@ button {
     transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
+#firebase-account {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 2px solid rgba(255,255,255,0.45);
+    position: relative;
+    z-index: 2;
+}
+
+#firebase-account-title {
+    color: white;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 19px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 9px;
+}
+
+.firebase-account-button {
+    width: 100%;
+    background: #f4d03f;
+    color: white;
+    border: 3px solid white;
+    border-radius: 12px;
+    padding: 11px 16px;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 8px;
+    box-shadow: 0 4px 0 rgba(174, 134, 0, 0.55);
+}
+
+.firebase-account-button:disabled {
+    background: #d9d9d9;
+    color: #666;
+    cursor: default;
+    box-shadow: none;
+}
+
+#firebase-account-status {
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1.35;
+    margin-top: 10px;
+    min-height: 19px;
+    word-break: break-word;
+}
+
+
 @media (max-width: 520px) {
     #settings-panel {
         min-height: 280px;
@@ -1923,6 +1972,23 @@ button {
             </button>
             <button class="language-option" data-language="en" type="button">
                 English
+            </button>
+        </div>
+
+        <div id="firebase-account">
+            <div id="firebase-account-title">Cuenta Google</div>
+            <button id="firebase-signin-button" class="firebase-account-button" type="button">
+                Vincular con Google
+            </button>
+            <div id="firebase-account-status"></div>
+            <button id="firebase-cloud-save-button" class="firebase-account-button" type="button" style="display:none;">
+                Guardar progreso en la nube
+            </button>
+            <button id="firebase-cloud-restore-button" class="firebase-account-button" type="button" style="display:none;">
+                Restaurar progreso de la nube
+            </button>
+            <button id="firebase-signout-button" class="firebase-account-button" type="button" style="display:none;">
+                Cerrar sesión
             </button>
         </div>
     </div>
@@ -5303,6 +5369,388 @@ resumeButton.addEventListener("click", () => {
     }
 });
 
+</script>
+
+
+<script type="module">
+/* ================= FIREBASE / CUENTA GOOGLE =================
+   Firebase funciona como una capa independiente del guardado local.
+   NO modifica SAVE_KEY, saveGame(), loadGame() ni la estructura
+   de ARENAS_SAVE_V1.
+*/
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+import {
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+    onAuthStateChanged,
+    signOut
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+import {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyAR6J77oGBm0EwwYELllW4nfo09LRpTJWs",
+    authDomain: "arena-s-dev.firebaseapp.com",
+    projectId: "arena-s-dev",
+    storageBucket: "arena-s-dev.firebasestorage.app",
+    messagingSenderId: "629965962732",
+    appId: "1:629965962732:web:6389dd56ecae5fd61354c9",
+    measurementId: "G-3V7GCQ55PH"
+};
+
+const firebaseApp = initializeApp(firebaseConfig);
+const firebaseAuth = getAuth(firebaseApp);
+const firebaseDB = getFirestore(firebaseApp);
+const googleProvider = new GoogleAuthProvider();
+
+const firebaseSignInButton =
+    document.getElementById("firebase-signin-button");
+const firebaseCloudSaveButton =
+    document.getElementById("firebase-cloud-save-button");
+const firebaseCloudRestoreButton =
+    document.getElementById("firebase-cloud-restore-button");
+const firebaseSignoutButton =
+    document.getElementById("firebase-signout-button");
+const firebaseAccountStatus =
+    document.getElementById("firebase-account-status");
+
+const FIREBASE_MAIN_SAVE_KEY = "ARENAS_SAVE_V1";
+const FIREBASE_SEASON_SAVE_KEY = "ARENAS_SEASON_V1";
+const FIREBASE_LANGUAGE_KEY = "ARENAS_LANGUAGE_V1";
+
+let firebaseCurrentUser = null;
+let firebaseCloudExists = false;
+
+function firebaseText(es, en) {
+    const language =
+        localStorage.getItem(FIREBASE_LANGUAGE_KEY) === "en"
+            ? "en"
+            : "es";
+
+    return language === "en" ? en : es;
+}
+
+function setFirebaseStatus(es, en) {
+    firebaseAccountStatus.textContent =
+        firebaseText(es, en);
+}
+
+function readLocalProgress() {
+    let mainSave = null;
+    let seasonSave = null;
+    let language = localStorage.getItem(FIREBASE_LANGUAGE_KEY) || "es";
+
+    try {
+        const rawMain =
+            localStorage.getItem(FIREBASE_MAIN_SAVE_KEY);
+
+        if (rawMain) {
+            mainSave = JSON.parse(rawMain);
+        }
+    } catch (error) {
+        console.warn(
+            "Firebase no pudo leer el guardado local principal.",
+            error
+        );
+    }
+
+    try {
+        const rawSeason =
+            localStorage.getItem(FIREBASE_SEASON_SAVE_KEY);
+
+        if (rawSeason) {
+            seasonSave = JSON.parse(rawSeason);
+        }
+    } catch (error) {
+        console.warn(
+            "Firebase no pudo leer el guardado local de temporada.",
+            error
+        );
+    }
+
+    return {
+        mainSave,
+        seasonSave,
+        language
+    };
+}
+
+async function saveProgressToCloud() {
+    if (!firebaseCurrentUser) {
+        setFirebaseStatus(
+            "Primero vinculá tu cuenta de Google.",
+            "First link your Google account."
+        );
+        return;
+    }
+
+    try {
+        const progress = readLocalProgress();
+
+        await setDoc(
+            doc(
+                firebaseDB,
+                "players",
+                firebaseCurrentUser.uid
+            ),
+            {
+                mainSave: progress.mainSave,
+                seasonSave: progress.seasonSave,
+                language: progress.language,
+                updatedAt: serverTimestamp()
+            }
+        );
+
+        firebaseCloudExists = true;
+
+        setFirebaseStatus(
+            "Progreso guardado en la nube.",
+            "Progress saved to the cloud."
+        );
+
+    } catch (error) {
+        console.error(
+            "No se pudo guardar el progreso en Firestore.",
+            error
+        );
+
+        setFirebaseStatus(
+            "No se pudo guardar. Revisá las reglas de Firestore.",
+            "Could not save. Check your Firestore rules."
+        );
+    }
+}
+
+async function restoreProgressFromCloud() {
+    if (!firebaseCurrentUser) {
+        setFirebaseStatus(
+            "Primero vinculá tu cuenta de Google.",
+            "First link your Google account."
+        );
+        return;
+    }
+
+    if (
+        !confirm(
+            firebaseText(
+                "Esto reemplazará el progreso local de este dispositivo por la copia de la nube. ¿Continuar?",
+                "This will replace this device's local progress with the cloud copy. Continue?"
+            )
+        )
+    ) {
+        return;
+    }
+
+    try {
+        const snapshot =
+            await getDoc(
+                doc(
+                    firebaseDB,
+                    "players",
+                    firebaseCurrentUser.uid
+                )
+            );
+
+        if (!snapshot.exists()) {
+            setFirebaseStatus(
+                "Todavía no existe una copia de progreso en la nube.",
+                "There is no cloud progress copy yet."
+            );
+            firebaseCloudExists = false;
+            firebaseCloudRestoreButton.style.display = "none";
+            return;
+        }
+
+        const cloudData = snapshot.data();
+
+        if (cloudData.mainSave) {
+            localStorage.setItem(
+                FIREBASE_MAIN_SAVE_KEY,
+                JSON.stringify(cloudData.mainSave)
+            );
+        }
+
+        if (cloudData.seasonSave) {
+            localStorage.setItem(
+                FIREBASE_SEASON_SAVE_KEY,
+                JSON.stringify(cloudData.seasonSave)
+            );
+        }
+
+        if (
+            cloudData.language === "en" ||
+            cloudData.language === "es"
+        ) {
+            localStorage.setItem(
+                FIREBASE_LANGUAGE_KEY,
+                cloudData.language
+            );
+        }
+
+        setFirebaseStatus(
+            "Progreso restaurado. ARENA'S se reiniciará.",
+            "Progress restored. ARENA'S will restart."
+        );
+
+        setTimeout(() => {
+            location.reload();
+        }, 900);
+
+    } catch (error) {
+        console.error(
+            "No se pudo restaurar el progreso desde Firestore.",
+            error
+        );
+
+        setFirebaseStatus(
+            "No se pudo restaurar. Revisá las reglas de Firestore.",
+            "Could not restore. Check your Firestore rules."
+        );
+    }
+}
+
+async function refreshCloudAvailability() {
+    if (!firebaseCurrentUser) {
+        firebaseCloudExists = false;
+        firebaseCloudSaveButton.style.display = "none";
+        firebaseCloudRestoreButton.style.display = "none";
+        return;
+    }
+
+    try {
+        const snapshot =
+            await getDoc(
+                doc(
+                    firebaseDB,
+                    "players",
+                    firebaseCurrentUser.uid
+                )
+            );
+
+        firebaseCloudExists = snapshot.exists();
+
+        firebaseCloudSaveButton.style.display = "block";
+        firebaseCloudRestoreButton.style.display =
+            firebaseCloudExists ? "block" : "none";
+
+    } catch (error) {
+        console.warn(
+            "No se pudo comprobar la copia de Firestore.",
+            error
+        );
+
+        firebaseCloudSaveButton.style.display = "block";
+        firebaseCloudRestoreButton.style.display = "none";
+    }
+}
+
+firebaseSignInButton.addEventListener(
+    "click",
+    async () => {
+
+        try {
+            firebaseSignInButton.disabled = true;
+
+            const result =
+                await signInWithPopup(
+                    firebaseAuth,
+                    googleProvider
+                );
+
+            firebaseCurrentUser = result.user;
+
+            setFirebaseStatus(
+                "Cuenta vinculada: " + (result.user.email || ""),
+                "Account linked: " + (result.user.email || "")
+            );
+
+            await refreshCloudAvailability();
+
+        } catch (error) {
+            console.error(
+                "Error al iniciar sesión con Google.",
+                error
+            );
+
+            if (error.code === "auth/popup-closed-by-user") {
+                setFirebaseStatus(
+                    "Inicio de sesión cancelado.",
+                    "Sign-in cancelled."
+                );
+            } else if (error.code === "auth/unauthorized-domain") {
+                setFirebaseStatus(
+                    "Este dominio todavía no está autorizado en Firebase.",
+                    "This domain is not authorized in Firebase yet."
+                );
+            } else {
+                setFirebaseStatus(
+                    "No se pudo iniciar sesión con Google.",
+                    "Could not sign in with Google."
+                );
+            }
+
+        } finally {
+            firebaseSignInButton.disabled = false;
+        }
+    }
+);
+
+firebaseCloudSaveButton.addEventListener(
+    "click",
+    saveProgressToCloud
+);
+
+firebaseCloudRestoreButton.addEventListener(
+    "click",
+    restoreProgressFromCloud
+);
+
+firebaseSignoutButton.addEventListener(
+    "click",
+    async () => {
+        try {
+            await signOut(firebaseAuth);
+        } catch (error) {
+            console.error(
+                "No se pudo cerrar la sesión de Google.",
+                error
+            );
+        }
+    }
+);
+
+onAuthStateChanged(
+    firebaseAuth,
+    async user => {
+
+        firebaseCurrentUser = user;
+
+        if (!user) {
+            firebaseSignInButton.style.display = "block";
+            firebaseCloudSaveButton.style.display = "none";
+            firebaseCloudRestoreButton.style.display = "none";
+            firebaseSignoutButton.style.display = "none";
+            firebaseAccountStatus.textContent = "";
+            return;
+        }
+
+        firebaseSignInButton.style.display = "none";
+        firebaseSignoutButton.style.display = "block";
+
+        setFirebaseStatus(
+            "Cuenta vinculada: " + (user.email || ""),
+            "Account linked: " + (user.email || "")
+        );
+
+        await refreshCloudAvailability();
+    }
+);
 </script>
 
 </body>
