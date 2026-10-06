@@ -30,7 +30,7 @@ button {
 #splash {
     position: fixed;
     inset: 0;
-    background: #55c7e8;
+    background: #050505;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -38,10 +38,14 @@ button {
 }
 
 #splash h1 {
-    color: white;
-    font-size: 55px;
-    font-weight: bold;
-    font-family: Trebuchet MS, Arial, sans-serif;
+    color: #f4d03f;
+    font-size: clamp(52px, 9vw, 82px);
+    font-weight: 900;
+    font-family: Impact, Haettenschweiler, "Arial Narrow Bold", Arial, sans-serif;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    text-shadow: 0 2px 0 #fff4a3, 0 5px 0 #b88b00, 0 10px 22px rgba(244, 208, 63, 0.28);
+    margin: 0;
 }
 
 /* ================= NOMBRE ================= */
@@ -879,7 +883,7 @@ button {
 #loading {
     position: fixed;
     inset: 0;
-    background: #55c7e8;
+    background: linear-gradient(145deg, #55c7e8 0%, #278bad 100%);
     display: none;
     justify-content: center;
     align-items: center;
@@ -888,8 +892,17 @@ button {
 
 #loading h1 {
     color: white;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 38px;
+    font-family: Trebuchet MS, Arial, sans-serif;
+    font-size: clamp(34px, 6vw, 52px);
+    font-weight: 900;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-shadow: 0 4px 0 rgba(0,0,0,0.16), 0 8px 18px rgba(0,0,0,0.22);
+    padding: 18px 30px;
+    border: 4px solid white;
+    border-radius: 18px;
+    background: rgba(0,0,0,0.16);
+    box-shadow: 0 0 0 3px rgba(244,208,63,0.85), 0 12px 30px rgba(0,0,0,0.25);
 }
 
 /* ================= GAME ================= */
@@ -960,45 +973,66 @@ button {
     position: absolute;
     top: 18px;
     right: 18px;
-    width: 58px;
-    height: 58px;
-    background: linear-gradient(180deg, #55c7e8, #349bb7);
+    width: 62px;
+    height: 62px;
+    background: linear-gradient(145deg, #55c7e8 0%, #278bad 100%);
     color: white;
     border: 3px solid white;
-    border-radius: 14px;
-    font-size: 26px;
+    border-radius: 17px;
+    font-size: 27px;
+    font-weight: 900;
     z-index: 100;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    box-shadow: 0 0 0 3px rgba(244,208,63,0.9), 0 7px 0 #176b82, 0 12px 22px rgba(0,0,0,0.32);
+    text-shadow: 1px 2px 0 rgba(0,0,0,0.22);
 }
 
 #pause-panel {
     position: fixed;
-    width: 420px;
+    width: 440px;
     max-width: 85%;
-    height: 300px;
+    min-height: 310px;
+    height: auto;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    background: #55c7e8;
-    border: 4px solid white;
-    border-radius: 15px;
+    background: linear-gradient(145deg, #55c7e8 0%, #278bad 100%);
+    border: 5px solid white;
+    border-radius: 22px;
     display: none;
     z-index: 600;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 20px;
+    gap: 18px;
+    padding: 70px 28px 45px;
+    box-shadow: 0 0 0 4px rgba(244,208,63,0.9), 0 18px 40px rgba(0,0,0,0.42), inset 0 0 25px rgba(255,255,255,0.12);
+}
+
+#pause-panel::before {
+    content: "PAUSA";
+    position: absolute;
+    top: 25px;
+    left: 0;
+    width: 100%;
+    color: #f4d03f;
+    font-family: Impact, Haettenschweiler, "Arial Narrow Bold", Arial, sans-serif;
+    font-size: 32px;
+    letter-spacing: 4px;
+    text-align: center;
+    text-shadow: 2px 2px 0 white, 4px 4px 0 rgba(0,0,0,0.18);
 }
 
 .pause-action {
-    background: #f39c12;
+    background: linear-gradient(180deg, #f4d03f, #d99e0b);
     color: white;
     border: 3px solid white;
-    border-radius: 10px;
-    padding: 12px 30px;
+    border-radius: 12px;
+    padding: 13px 30px;
     font-size: 20px;
     font-weight: bold;
-    min-width: 190px;
+    min-width: 210px;
+    box-shadow: 0 5px 0 #9f7300, 0 7px 14px rgba(0,0,0,0.22);
+    text-shadow: 1px 2px 0 rgba(0,0,0,0.18);
 }
 
 #player {
@@ -1304,7 +1338,7 @@ button {
 #victory-screen {
     position: fixed;
     inset: 0;
-    background: #55c7e8;
+    background: radial-gradient(circle at center, #4bc5e7 0%, #278bad 72%, #176b82 100%);
     display: none;
     flex-direction: column;
     justify-content: center;
@@ -1312,30 +1346,54 @@ button {
     z-index: 1000;
 }
 
+#victory-screen::before {
+    content: "";
+    position: absolute;
+    width: min(520px, 82%);
+    height: 360px;
+    border: 4px solid #f4d03f;
+    border-radius: 28px;
+    background: rgba(0,0,0,0.14);
+    box-shadow: 0 0 0 4px white, 0 18px 45px rgba(0,0,0,0.3), inset 0 0 30px rgba(255,255,255,0.1);
+}
+
+#victory-screen h1,
+#victory-screen p,
+#victory-screen #back-menu-button {
+    position: relative;
+    z-index: 1;
+}
+
 #victory-screen h1 {
-    color: white;
-    font-size: 55px;
-    margin: 0 0 20px;
+    color: #f4d03f;
+    font-family: Impact, Haettenschweiler, "Arial Narrow Bold", Arial, sans-serif;
+    font-size: clamp(55px, 9vw, 78px);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin: 0 0 22px;
+    text-shadow: 3px 3px 0 white, 6px 7px 0 rgba(0,0,0,0.22);
 }
 
 #victory-screen p {
     color: white;
     font-family: Georgia, "Times New Roman", serif;
     font-size: 24px;
-    margin: 8px;
+    margin: 7px;
     font-weight: bold;
+    text-shadow: 0 3px 5px rgba(0,0,0,0.25);
 }
 
 #back-menu-button,
 #back-menu-defeat {
     margin-top: 25px;
-    background: #f39c12;
+    background: linear-gradient(180deg, #f4d03f, #d99e0b);
     color: white;
     border: 3px solid white;
-    border-radius: 10px;
-    padding: 12px 30px;
+    border-radius: 12px;
+    padding: 13px 32px;
     font-size: 20px;
     font-weight: bold;
+    box-shadow: 0 5px 0 #9f7300, 0 8px 16px rgba(0,0,0,0.25);
 }
 
 /* ================= DERROTA ================= */
@@ -1343,7 +1401,7 @@ button {
 #defeat-screen {
     position: fixed;
     inset: 0;
-    background: #55c7e8;
+    background: radial-gradient(circle at center, #6c7f88 0%, #34434a 65%, #20292d 100%);
     display: none;
     flex-direction: column;
     justify-content: center;
@@ -1351,18 +1409,46 @@ button {
     z-index: 1000;
 }
 
+#defeat-screen::before {
+    content: "";
+    position: absolute;
+    width: min(520px, 82%);
+    height: 360px;
+    border: 4px solid #e53935;
+    border-radius: 28px;
+    background: rgba(0,0,0,0.22);
+    box-shadow: 0 0 0 4px white, 0 18px 45px rgba(0,0,0,0.38), inset 0 0 30px rgba(255,255,255,0.05);
+}
+
+#defeat-screen h1,
+#defeat-screen p,
+#defeat-screen #back-menu-defeat {
+    position: relative;
+    z-index: 1;
+}
+
 #defeat-screen h1 {
-    color: red;
-    font-size: 55px;
-    margin: 0 0 20px;
+    color: #e53935;
+    font-family: Impact, Haettenschweiler, "Arial Narrow Bold", Arial, sans-serif;
+    font-size: clamp(55px, 9vw, 78px);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin: 0 0 22px;
+    text-shadow: 3px 3px 0 white, 6px 7px 0 rgba(0,0,0,0.3);
 }
 
 #defeat-screen p {
     color: white;
     font-family: Georgia, "Times New Roman", serif;
     font-size: 24px;
-    margin: 8px;
+    margin: 7px;
     font-weight: bold;
+    text-shadow: 0 3px 5px rgba(0,0,0,0.3);
+}
+
+#back-menu-defeat {
+    background: linear-gradient(180deg, #55c7e8, #278bad);
+    box-shadow: 0 5px 0 #176b82, 0 8px 16px rgba(0,0,0,0.28);
 }
 /* ================= ESTILO VISUAL MENU / MERCADO ================= */
 
@@ -1980,10 +2066,10 @@ button {
             <button id="firebase-signin-button" class="firebase-account-button" type="button">
                 Vincular con Google
             </button>
-            <div id="firebase-account-status"></div>
-            <button id="firebase-cloud-save-button" class="firebase-account-button" type="button" style="display:none;">
-                Guardar progreso en la nube
+            <button id="firebase-login-button" class="firebase-account-button" type="button">
+                Iniciar sesión
             </button>
+            <div id="firebase-account-status"></div>
             <button id="firebase-cloud-restore-button" class="firebase-account-button" type="button" style="display:none;">
                 Restaurar progreso de la nube
             </button>
@@ -5411,8 +5497,8 @@ const googleProvider = new GoogleAuthProvider();
 
 const firebaseSignInButton =
     document.getElementById("firebase-signin-button");
-const firebaseCloudSaveButton =
-    document.getElementById("firebase-cloud-save-button");
+const firebaseLoginButton =
+    document.getElementById("firebase-login-button");
 const firebaseCloudRestoreButton =
     document.getElementById("firebase-cloud-restore-button");
 const firebaseSignoutButton =
@@ -5426,6 +5512,11 @@ const FIREBASE_LANGUAGE_KEY = "ARENAS_LANGUAGE_V1";
 
 let firebaseCurrentUser = null;
 let firebaseCloudExists = false;
+let firebaseAutoSaveLastSnapshot = null;
+let firebaseAutoSaveTimer = null;
+let firebaseAutoSaveInProgress = false;
+let firebaseAutoSaveInterval = null;
+let firebaseLoginRestoreInProgress = false;
 
 function firebaseText(es, en) {
     const language =
@@ -5481,17 +5572,28 @@ function readLocalProgress() {
     };
 }
 
-async function saveProgressToCloud() {
-    if (!firebaseCurrentUser) {
-        setFirebaseStatus(
-            "Primero vinculá tu cuenta de Google.",
-            "First link your Google account."
+function getLocalProgressSnapshot() {
+    try {
+        return JSON.stringify(readLocalProgress());
+    } catch (error) {
+        console.warn(
+            "Firebase no pudo comparar el progreso local.",
+            error
         );
-        return;
+        return null;
     }
+}
+
+async function saveProgressToCloud(silent = false) {
+    if (!firebaseCurrentUser || firebaseAutoSaveInProgress) {
+        return false;
+    }
+
+    firebaseAutoSaveInProgress = true;
 
     try {
         const progress = readLocalProgress();
+        const snapshot = JSON.stringify(progress);
 
         await setDoc(
             doc(
@@ -5508,23 +5610,119 @@ async function saveProgressToCloud() {
         );
 
         firebaseCloudExists = true;
+        firebaseAutoSaveLastSnapshot = snapshot;
 
-        setFirebaseStatus(
-            "Progreso guardado en la nube.",
-            "Progress saved to the cloud."
-        );
+        if (!silent) {
+            setFirebaseStatus(
+                "Progreso guardado automáticamente.",
+                "Progress saved automatically."
+            );
+        }
+
+        return true;
 
     } catch (error) {
         console.error(
-            "No se pudo guardar el progreso en Firestore.",
+            "No se pudo guardar automáticamente el progreso en Firestore.",
             error
         );
 
-        setFirebaseStatus(
-            "No se pudo guardar. Revisá las reglas de Firestore.",
-            "Could not save. Check your Firestore rules."
-        );
+        if (!silent) {
+            setFirebaseStatus(
+                "No se pudo guardar automáticamente. Revisá tu conexión.",
+                "Automatic save failed. Check your connection."
+            );
+        }
+
+        return false;
+
+    } finally {
+        firebaseAutoSaveInProgress = false;
     }
+}
+
+function scheduleAutomaticCloudSave() {
+    if (!firebaseCurrentUser) {
+        return;
+    }
+
+    if (firebaseAutoSaveTimer) {
+        clearTimeout(firebaseAutoSaveTimer);
+    }
+
+    firebaseAutoSaveTimer = setTimeout(
+        async () => {
+            firebaseAutoSaveTimer = null;
+
+            const currentSnapshot =
+                getLocalProgressSnapshot();
+
+            if (!currentSnapshot) {
+                return;
+            }
+
+            if (
+                currentSnapshot ===
+                firebaseAutoSaveLastSnapshot
+            ) {
+                return;
+            }
+
+            await saveProgressToCloud();
+        },
+        800
+    );
+}
+
+function startAutomaticCloudSaveWatcher() {
+    if (firebaseAutoSaveInterval) {
+        clearInterval(firebaseAutoSaveInterval);
+    }
+
+    firebaseAutoSaveInterval = setInterval(
+        () => {
+            if (!firebaseCurrentUser) {
+                return;
+            }
+
+            const currentSnapshot =
+                getLocalProgressSnapshot();
+
+            if (!currentSnapshot) {
+                return;
+            }
+
+            if (
+                firebaseAutoSaveLastSnapshot === null
+            ) {
+                firebaseAutoSaveLastSnapshot = currentSnapshot;
+                return;
+            }
+
+            if (
+                currentSnapshot !==
+                firebaseAutoSaveLastSnapshot
+            ) {
+                scheduleAutomaticCloudSave();
+            }
+        },
+        1000
+    );
+}
+
+function stopAutomaticCloudSaveWatcher() {
+    if (firebaseAutoSaveInterval) {
+        clearInterval(firebaseAutoSaveInterval);
+        firebaseAutoSaveInterval = null;
+    }
+
+    if (firebaseAutoSaveTimer) {
+        clearTimeout(firebaseAutoSaveTimer);
+        firebaseAutoSaveTimer = null;
+    }
+
+    firebaseAutoSaveLastSnapshot = null;
+    firebaseAutoSaveInProgress = false;
 }
 
 async function restoreProgressFromCloud() {
@@ -5618,7 +5816,6 @@ async function restoreProgressFromCloud() {
 async function refreshCloudAvailability() {
     if (!firebaseCurrentUser) {
         firebaseCloudExists = false;
-        firebaseCloudSaveButton.style.display = "none";
         firebaseCloudRestoreButton.style.display = "none";
         return;
     }
@@ -5635,7 +5832,6 @@ async function refreshCloudAvailability() {
 
         firebaseCloudExists = snapshot.exists();
 
-        firebaseCloudSaveButton.style.display = "block";
         firebaseCloudRestoreButton.style.display =
             firebaseCloudExists ? "block" : "none";
 
@@ -5645,7 +5841,6 @@ async function refreshCloudAvailability() {
             error
         );
 
-        firebaseCloudSaveButton.style.display = "block";
         firebaseCloudRestoreButton.style.display = "none";
     }
 }
@@ -5666,11 +5861,18 @@ firebaseSignInButton.addEventListener(
             firebaseCurrentUser = result.user;
 
             setFirebaseStatus(
-                "Cuenta vinculada: " + (result.user.email || ""),
-                "Account linked: " + (result.user.email || "")
+                "Cuenta vinculada: " + (result.user.email || "") + " · Guardado automático activo",
+                "Account linked: " + (result.user.email || "") + " · Automatic saving active"
             );
 
             await refreshCloudAvailability();
+
+            firebaseAutoSaveLastSnapshot =
+                getLocalProgressSnapshot();
+
+            if (!firebaseCloudExists) {
+                await saveProgressToCloud(true);
+            }
 
         } catch (error) {
             console.error(
@@ -5701,9 +5903,125 @@ firebaseSignInButton.addEventListener(
     }
 );
 
-firebaseCloudSaveButton.addEventListener(
+firebaseLoginButton.addEventListener(
     "click",
-    saveProgressToCloud
+    async () => {
+
+        try {
+            firebaseLoginButton.disabled = true;
+            firebaseLoginRestoreInProgress = true;
+
+            googleProvider.setCustomParameters({
+                prompt: "select_account"
+            });
+
+            const result =
+                await signInWithPopup(
+                    firebaseAuth,
+                    googleProvider
+                );
+
+            firebaseCurrentUser = result.user;
+
+            const snapshot =
+                await getDoc(
+                    doc(
+                        firebaseDB,
+                        "players",
+                        result.user.uid
+                    )
+                );
+
+            if (!snapshot.exists()) {
+                setFirebaseStatus(
+                    "Esta cuenta de Google no tiene una cuenta de ARENA'S vinculada.",
+                    "This Google account does not have an ARENA'S account linked to it."
+                );
+
+                await signOut(firebaseAuth);
+                return;
+            }
+
+            const confirmed =
+                confirm(
+                    firebaseText(
+                        "Se encontró tu cuenta de ARENA'S en la nube. Al entrar, se reemplazará el progreso local de este dispositivo por ese progreso. ¿Continuar?",
+                        "Your ARENA'S account was found in the cloud. Signing in will replace this device's local progress with that progress. Continue?"
+                    )
+                );
+
+            if (!confirmed) {
+                await signOut(firebaseAuth);
+                return;
+            }
+
+            const cloudData = snapshot.data();
+
+            if (cloudData.mainSave) {
+                localStorage.setItem(
+                    FIREBASE_MAIN_SAVE_KEY,
+                    JSON.stringify(cloudData.mainSave)
+                );
+            }
+
+            if (cloudData.seasonSave) {
+                localStorage.setItem(
+                    FIREBASE_SEASON_SAVE_KEY,
+                    JSON.stringify(cloudData.seasonSave)
+                );
+            }
+
+            if (
+                cloudData.language === "en" ||
+                cloudData.language === "es"
+            ) {
+                localStorage.setItem(
+                    FIREBASE_LANGUAGE_KEY,
+                    cloudData.language
+                );
+            }
+
+            firebaseCloudExists = true;
+            firebaseAutoSaveLastSnapshot =
+                getLocalProgressSnapshot();
+
+            setFirebaseStatus(
+                "Sesión iniciada. ARENA'S se reiniciará con tu progreso.",
+                "Signed in. ARENA'S will restart with your progress."
+            );
+
+            setTimeout(() => {
+                location.reload();
+            }, 900);
+
+        } catch (error) {
+            console.error(
+                "Error al iniciar sesión en ARENA'S con Google.",
+                error
+            );
+
+            if (error.code === "auth/popup-closed-by-user") {
+                setFirebaseStatus(
+                    "Inicio de sesión cancelado.",
+                    "Sign-in cancelled."
+                );
+            } else if (error.code === "auth/unauthorized-domain") {
+                setFirebaseStatus(
+                    "Este dominio todavía no está autorizado en Firebase.",
+                    "This domain is not authorized in Firebase yet."
+                );
+            } else {
+                setFirebaseStatus(
+                    "No se pudo iniciar sesión en ARENA'S.",
+                    "Could not sign in to ARENA'S."
+                );
+            }
+
+        } finally {
+            firebaseLoginRestoreInProgress = false;
+            firebaseLoginButton.disabled = false;
+        }
+    }
 );
 
 firebaseCloudRestoreButton.addEventListener(
@@ -5732,8 +6050,9 @@ onAuthStateChanged(
         firebaseCurrentUser = user;
 
         if (!user) {
+            stopAutomaticCloudSaveWatcher();
             firebaseSignInButton.style.display = "block";
-            firebaseCloudSaveButton.style.display = "none";
+            firebaseLoginButton.style.display = "block";
             firebaseCloudRestoreButton.style.display = "none";
             firebaseSignoutButton.style.display = "none";
             firebaseAccountStatus.textContent = "";
@@ -5741,14 +6060,26 @@ onAuthStateChanged(
         }
 
         firebaseSignInButton.style.display = "none";
+        firebaseLoginButton.style.display = "none";
         firebaseSignoutButton.style.display = "block";
 
         setFirebaseStatus(
-            "Cuenta vinculada: " + (user.email || ""),
-            "Account linked: " + (user.email || "")
+            "Cuenta vinculada: " + (user.email || "") + " · Guardado automático activo",
+            "Account linked: " + (user.email || "") + " · Automatic saving active"
         );
 
         await refreshCloudAvailability();
+
+        firebaseAutoSaveLastSnapshot =
+            getLocalProgressSnapshot();
+
+        if (!firebaseCloudExists) {
+            await saveProgressToCloud(true);
+        }
+
+        if (!firebaseLoginRestoreInProgress) {
+            startAutomaticCloudSaveWatcher();
+        }
     }
 );
 </script>
