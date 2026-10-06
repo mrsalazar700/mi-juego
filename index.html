@@ -1,0 +1,6088 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARENA'S</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    user-select: none;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+/* ================= SPLASH ================= */
+
+#splash {
+    position: fixed;
+    inset: 0;
+    background: #050505;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+#splash h1 {
+    color: #f4d03f;
+    font-size: clamp(52px, 9vw, 82px);
+    font-weight: 900;
+    font-family: Impact, Haettenschweiler, "Arial Narrow Bold", Arial, sans-serif;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    text-shadow: 0 2px 0 #fff4a3, 0 5px 0 #b88b00, 0 10px 22px rgba(244, 208, 63, 0.28);
+    margin: 0;
+}
+
+/* ================= NOMBRE ================= */
+
+#name-screen {
+    position: fixed;
+    inset: 0;
+    background: #55c7e8;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 900;
+}
+
+#name-screen h2 {
+    color: white;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 32px;
+    margin: 0 0 25px 0;
+    text-align: center;
+}
+
+#name-input {
+    width: 320px;
+    max-width: 85%;
+    height: 48px;
+    border: none;
+    border-radius: 12px;
+    background: white;
+    padding: 0 15px;
+    font-size: 20px;
+    outline: none;
+    text-align: center;
+}
+
+#continue-button {
+    margin-top: 18px;
+    background: #f39c12;
+    color: white;
+    border: 3px solid white;
+    border-radius: 10px;
+    padding: 12px 30px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#name-warning {
+    position: absolute;
+    top: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: red;
+    font-weight: bold;
+    font-size: 17px;
+    display: none;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* ================= MENU ================= */
+
+#menu {
+    position: fixed;
+    inset: 0;
+    background: #f4d03f;
+    display: none;
+}
+
+#profile-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: #55c7e8;
+    color: white;
+    border: 3px solid white;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+#pearls {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    color: white;
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+#current-character {
+    position: absolute;
+    top: 105px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px;
+    height: 100px;
+}
+
+#current-skin {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    font-size: 80px;
+    line-height: 90px;
+    z-index: 2;
+}
+
+#current-weapon {
+    position: absolute;
+    font-size: 45px;
+    z-index: 3;
+    left: calc(50% + 30px);
+    top: 40px;
+    transform: rotate(-25deg);
+    display: none;
+}
+
+#campaign-button {
+    position: absolute;
+    top: 255px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #e53935;
+    color: white;
+    border: 4px solid white;
+    border-radius: 12px;
+    padding: 15px 55px;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+#market-button {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background: #55c7e8;
+    color: white;
+    border: 3px solid white;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#ranks-button {
+    position: absolute;
+    bottom: 20px;
+    left: 135px;
+    background: #55c7e8;
+    color: white;
+    border: 3px solid white;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#inventory-button {
+    position: absolute;
+    bottom: 20px;
+    left: 260px;
+    background: #55c7e8;
+    color: white;
+    border: 3px solid white;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#season-button {
+    position: absolute;
+    bottom: 20px;
+    left: 400px;
+    background: #55c7e8;
+    color: white;
+    border: 3px solid white;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* ================= CONFIGURACION ================= */
+
+#settings-button {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    background: #55c7e8;
+    color: white;
+    border: 3px solid white;
+    border-radius: 12px;
+    font-size: 27px;
+    line-height: 1;
+    font-weight: bold;
+    z-index: 20;
+    box-shadow: 0 5px 0 rgba(0,0,0,0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#settings-panel {
+    position: fixed;
+    width: 430px;
+    max-width: 88%;
+    min-height: 300px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(145deg, #55c7e8 0%, #39a9cf 55%, #278bad 100%);
+    border: 5px solid white;
+    border-radius: 22px;
+    display: none;
+    z-index: 1000;
+    overflow: hidden;
+    box-shadow: 0 0 0 4px rgba(244, 208, 63, 0.9), 0 14px 35px rgba(0, 0, 0, 0.38), inset 0 0 28px rgba(255, 255, 255, 0.12);
+}
+
+#settings-panel::before {
+    content: '';
+    position: absolute;
+    inset: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.55);
+    border-radius: 15px;
+    pointer-events: none;
+}
+
+#settings-title {
+    margin: 34px 0 25px;
+    color: #f4d03f;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 27px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-align: center;
+    text-shadow: 2px 2px 0 #ffffff, 3px 3px 0 rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 2;
+}
+
+#close-settings {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    width: 42px;
+    height: 42px;
+    background: #e53935;
+    color: white;
+    border: 3px solid white;
+    border-radius: 10px;
+    font-size: 22px;
+    font-weight: bold;
+    z-index: 10;
+    box-shadow: 0 4px 0 #b71c1c, 0 5px 10px rgba(0, 0, 0, 0.25);
+}
+
+#settings-content {
+    position: relative;
+    z-index: 2;
+    padding: 0 30px 35px;
+}
+
+#language-button {
+    width: 100%;
+    background: #f4d03f;
+    color: white;
+    border: 3px solid white;
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: left;
+    box-shadow: 0 5px 0 rgba(174, 134, 0, 0.65);
+}
+
+#language-options {
+    display: none;
+    margin-top: 7px;
+    background: white;
+    border: 3px solid #f4d03f;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.language-option {
+    width: 100%;
+    background: white;
+    color: #278bad;
+    border: 0;
+    border-bottom: 1px solid #d9d9d9;
+    padding: 12px 16px;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: left;
+}
+
+.language-option:last-child {
+    border-bottom: 0;
+}
+
+.language-option.selected {
+    background: #e8f8fc;
+}
+
+#settings-button {
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+#firebase-account {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 2px solid rgba(255,255,255,0.45);
+    position: relative;
+    z-index: 2;
+}
+
+#firebase-account-title {
+    color: white;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 19px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 9px;
+}
+
+.firebase-account-button {
+    width: 100%;
+    background: #f4d03f;
+    color: white;
+    border: 3px solid white;
+    border-radius: 12px;
+    padding: 11px 16px;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 8px;
+    box-shadow: 0 4px 0 rgba(174, 134, 0, 0.55);
+}
+
+.firebase-account-button:disabled {
+    background: #d9d9d9;
+    color: #666;
+    cursor: default;
+    box-shadow: none;
+}
+
+#firebase-account-status {
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1.35;
+    margin-top: 10px;
+    min-height: 19px;
+    word-break: break-word;
+}
+
+
+@media (max-width: 520px) {
+    #settings-panel {
+        min-height: 280px;
+    }
+
+    #settings-content {
+        padding-left: 22px;
+        padding-right: 22px;
+    }
+}
+
+/* ================= PERFIL ================= */
+
+#profile-panel {
+    position: fixed;
+    width: 440px;
+    max-width: 88%;
+    height: 410px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(145deg, #55c7e8 0%, #39a9cf 55%, #278bad 100%);
+    border: 5px solid white;
+    border-radius: 22px;
+    display: none;
+    z-index: 500;
+    overflow: hidden;
+    box-shadow: 0 0 0 4px rgba(244, 208, 63, 0.9), 0 14px 35px rgba(0, 0, 0, 0.38), inset 0 0 28px rgba(255, 255, 255, 0.12);
+}
+
+#profile-panel::before {
+    content: '';
+    position: absolute;
+    inset: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.55);
+    border-radius: 15px;
+    pointer-events: none;
+}
+
+#profile-panel::after {
+    content: attr(data-panel-title);
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #f4d03f;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 25px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    text-shadow: 2px 2px 0 #ffffff, 3px 3px 0 rgba(0, 0, 0, 0.2);
+    pointer-events: none;
+}
+
+#close-profile {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    width: 42px;
+    height: 42px;
+    background: #e53935;
+    color: white;
+    border: 3px solid white;
+    border-radius: 10px;
+    font-size: 22px;
+    font-weight: bold;
+    z-index: 10;
+    box-shadow: 0 4px 0 #b71c1c, 0 5px 10px rgba(0, 0, 0, 0.25);
+}
+
+#profile-info {
+    position: absolute;
+    inset: 72px 28px 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    gap: 12px;
+    color: white;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 21px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#profile-name {
+    background: rgba(255, 255, 255, 0.16);
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    border-radius: 12px;
+    padding: 10px 14px;
+    margin-bottom: 2px;
+    box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.08);
+}
+
+#profile-info > div:not(#profile-name):not(#profile-titles) {
+    background: #f4d03f;
+    color: #ffffff;
+    border: 3px solid white;
+    border-radius: 11px;
+    padding: 8px 14px;
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.18);
+    box-shadow: 0 4px 0 rgba(174, 134, 0, 0.65), 0 6px 12px rgba(0, 0, 0, 0.16);
+}
+
+#profile-titles {
+    width: 100%;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.12);
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    border-radius: 13px;
+    padding: 9px 4px 10px;
+    box-sizing: border-box;
+}
+
+#profile-titles-label {
+    display: block;
+    margin-bottom: 6px;
+    color: #f4d03f;
+    text-shadow: 1px 1px 0 #ffffff, 2px 2px 0 rgba(0, 0, 0, 0.15);
+}
+
+#profile-title-medals {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 3px;
+    max-width: 100%;
+    font-size: 25px;
+    line-height: 30px;
+}
+
+/* ================= CARTEL SUBIDA DE RANGO ================= */
+
+#rank-up-screen {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.25);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 850;
+}
+
+#rank-up-box {
+    position: relative;
+    width: 430px;
+    max-width: 85%;
+    min-height: 220px;
+    background: red;
+    border: 5px solid white;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 45px 25px 30px;
+}
+
+#close-rank-up {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 42px;
+    height: 42px;
+    background: red;
+    color: white;
+    border: 3px solid white;
+    border-radius: 8px;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+#rank-up-message {
+    color: #55c7e8;
+    font-size: 29px;
+    font-weight: bold;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    line-height: 1.25;
+}
+
+#rank-up-new-rank {
+    color: white;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 23px;
+    font-weight: bold;
+    margin-top: 15px;
+    text-align: center;
+}
+
+/* ================= RANGOS ================= */
+
+#ranks-screen {
+    position: fixed;
+    inset: 0;
+    background: #f4d03f;
+    display: none;
+    z-index: 450;
+}
+
+#close-ranks {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 48px;
+    height: 48px;
+    background: red;
+    color: white;
+    border: 3px solid white;
+    border-radius: 8px;
+    font-size: 23px;
+    font-weight: bold;
+    z-index: 20;
+}
+
+#ranks-content {
+    position: absolute;
+    top: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 650px;
+    max-width: 88%;
+    height: calc(100% - 50px);
+    overflow-y: auto;
+    padding: 10px 20px 40px;
+}
+
+#ranks-content::-webkit-scrollbar {
+    width: 12px;
+}
+
+#ranks-content::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.4);
+}
+
+#ranks-content::-webkit-scrollbar-thumb {
+    background: #55c7e8;
+    border: 2px solid white;
+    border-radius: 10px;
+}
+
+#ranks-title {
+    color: white;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 34px;
+    font-weight: bold;
+    text-align: center;
+    margin: 0 0 10px;
+}
+
+#ranks-subtitle {
+    color: white;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 19px;
+    font-weight: bold;
+    text-align: center;
+    margin: 0 0 25px;
+}
+
+.rank-item {
+    width: 100%;
+    min-height: 52px;
+    background: #55c7e8;
+    border: 3px solid white;
+    border-radius: 9px;
+    margin-bottom: 9px;
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    color: white;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.rank-medallions {
+    white-space: nowrap;
+}
+
+.rank-name {
+    text-align: right;
+}
+
+.rank-max {
+    border-color: white;
+}
+
+/* ================= MERCADO ================= */
+
+#market {
+    position: fixed;
+    inset: 0;
+    background: #f4d03f;
+    display: none;
+    z-index: 400;
+}
+
+#close-market {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 48px;
+    height: 48px;
+    background: red;
+    color: white;
+    border: 3px solid white;
+    border-radius: 8px;
+    font-size: 23px;
+    font-weight: bold;
+    z-index: 20;
+}
+
+#market-categories {
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 35px;
+    z-index: 20;
+}
+
+.market-category {
+    background: #e53935;
+    color: #f4d03f;
+    border: 3px solid white;
+    border-radius: 10px;
+    padding: 12px 35px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.market-section {
+    position: absolute;
+    top: 105px;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 105px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-bottom: 40px;
+}
+
+.market-section::-webkit-scrollbar {
+    width: 12px;
+}
+
+.market-section::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.4);
+}
+
+.market-section::-webkit-scrollbar-thumb {
+    background: #55c7e8;
+    border: 2px solid white;
+    border-radius: 10px;
+}
+
+.market-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 35px;
+}
+
+.market-image {
+    width: 190px;
+    height: 190px;
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    font-size: 100px;
+}
+
+.market-name {
+    margin-top: 10px;
+    color: white;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.market-price {
+    color: white;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 6px;
+}
+
+.market-buy-button {
+    margin-top: 10px;
+    min-width: 150px;
+    background: #55c7e8;
+    color: white;
+    border: 3px solid white;
+    border-radius: 9px;
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.market-buy-button.equipped {
+    background: #4caf50;
+}
+
+.market-buy-button.obtained {
+    background: #d9d9d9;
+    color: #666;
+    cursor: default;
+    box-shadow: none;
+}
+
+/* ================= POPUP PERLAS ================= */
+
+#not-enough-pearls {
+    position: fixed;
+    inset: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,0.2);
+    z-index: 800;
+}
+
+#not-enough-box {
+    position: relative;
+    width: 380px;
+    max-width: 85%;
+    min-height: 190px;
+    background: #55c7e8;
+    border: 4px solid white;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 25px 25px;
+}
+
+#close-not-enough {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 40px;
+    height: 40px;
+    background: red;
+    color: white;
+    border: 3px solid white;
+    border-radius: 8px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#not-enough-pearls-text {
+    color: white;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* ================= LOADING ================= */
+
+#loading {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(145deg, #55c7e8 0%, #278bad 100%);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 700;
+}
+
+#loading h1 {
+    color: white;
+    font-family: Trebuchet MS, Arial, sans-serif;
+    font-size: clamp(34px, 6vw, 52px);
+    font-weight: 900;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-shadow: 0 4px 0 rgba(0,0,0,0.16), 0 8px 18px rgba(0,0,0,0.22);
+    padding: 18px 30px;
+    border: 4px solid white;
+    border-radius: 18px;
+    background: rgba(0,0,0,0.16);
+    box-shadow: 0 0 0 3px rgba(244,208,63,0.85), 0 12px 30px rgba(0,0,0,0.25);
+}
+
+/* ================= GAME ================= */
+
+#game {
+    position: fixed;
+    inset: 0;
+    display: none;
+    overflow: hidden;
+    background: #4caf50;
+    touch-action: none;
+}
+
+#arena-ground {
+    position: absolute;
+    inset: 0;
+    background: #4caf50;
+    z-index: 0;
+}
+
+#arena-ground.terrain-dirt {
+    background-color: #8d5524;
+    background-image: radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), radial-gradient(rgba(0,0,0,0.08) 1px, transparent 1px);
+    background-size: 28px 28px, 43px 43px;
+    background-position: 0 0, 13px 17px;
+}
+
+#arena-ground.terrain-grass {
+    background-color: #4caf50;
+    background-image: radial-gradient(rgba(255,255,255,0.10) 1px, transparent 1px), linear-gradient(115deg, rgba(0,0,0,0.05) 1px, transparent 1px);
+    background-size: 25px 25px, 34px 34px;
+}
+
+#arena-ground.terrain-stone {
+    background-color: #777777;
+    background-image: linear-gradient(135deg, rgba(255,255,255,0.08) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.08) 75%), linear-gradient(45deg, rgba(255,255,255,0.05) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.06) 75%);
+    background-size: 44px 44px;
+}
+
+#lives-container {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    min-width: 155px;
+    padding: 9px 14px;
+    background: linear-gradient(180deg, rgba(20,20,20,0.88), rgba(0,0,0,0.68));
+    border: 3px solid #f39c12;
+    border-radius: 14px;
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.55), 0 5px 18px rgba(0,0,0,0.35);
+    z-index: 50;
+    font-size: 27px;
+    letter-spacing: 3px;
+    text-align: center;
+}
+
+#lives-container::before {
+    content: "VIDA";
+    display: block;
+    color: white;
+    font-size: 11px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 2px;
+}
+
+#pause-button {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 62px;
+    height: 62px;
+    background: linear-gradient(145deg, #55c7e8 0%, #278bad 100%);
+    color: white;
+    border: 3px solid white;
+    border-radius: 17px;
+    font-size: 27px;
+    font-weight: 900;
+    z-index: 100;
+    box-shadow: 0 0 0 3px rgba(244,208,63,0.9), 0 7px 0 #176b82, 0 12px 22px rgba(0,0,0,0.32);
+    text-shadow: 1px 2px 0 rgba(0,0,0,0.22);
+}
+
+#pause-panel {
+    position: fixed;
+    width: 440px;
+    max-width: 85%;
+    min-height: 310px;
+    height: auto;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(145deg, #55c7e8 0%, #278bad 100%);
+    border: 5px solid white;
+    border-radius: 22px;
+    display: none;
+    z-index: 600;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+    padding: 70px 28px 45px;
+    box-shadow: 0 0 0 4px rgba(244,208,63,0.9), 0 18px 40px rgba(0,0,0,0.42), inset 0 0 25px rgba(255,255,255,0.12);
+}
+
+#pause-panel::before {
+    content: "PAUSA";
+    position: absolute;
+    top: 25px;
+    left: 0;
+    width: 100%;
+    color: #f4d03f;
+    font-family: Impact, Haettenschweiler, "Arial Narrow Bold", Arial, sans-serif;
+    font-size: 32px;
+    letter-spacing: 4px;
+    text-align: center;
+    text-shadow: 2px 2px 0 white, 4px 4px 0 rgba(0,0,0,0.18);
+}
+
+.pause-action {
+    background: linear-gradient(180deg, #f4d03f, #d99e0b);
+    color: white;
+    border: 3px solid white;
+    border-radius: 12px;
+    padding: 13px 30px;
+    font-size: 20px;
+    font-weight: bold;
+    min-width: 210px;
+    box-shadow: 0 5px 0 #9f7300, 0 7px 14px rgba(0,0,0,0.22);
+    text-shadow: 1px 2px 0 rgba(0,0,0,0.18);
+}
+
+#player {
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    transform: translate(-50%, -50%);
+    z-index: 20;
+    pointer-events: none;
+}
+
+#player-skin {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 52px;
+    line-height: 55px;
+    z-index: 2;
+}
+
+#player-weapon {
+    position: absolute;
+    font-size: 30px;
+    z-index: 3;
+    left: calc(50% + 15px);
+    top: calc(50% - 5px);
+    transform: rotate(-25deg);
+    display: none;
+}
+
+.enemy {
+    position: absolute;
+    width: 54px;
+    height: 54px;
+    transform: translate(-50%, -50%);
+    font-size: 48px;
+    line-height: 54px;
+    text-align: center;
+    z-index: 15;
+    pointer-events: none;
+    filter: drop-shadow(0 3px 3px rgba(0,0,0,0.35));
+}
+
+#movement-controls {
+    position: absolute;
+    left: 22px;
+    bottom: 25px;
+    width: 138px;
+    height: 138px;
+    z-index: 50;
+    touch-action: none;
+}
+
+#joystick-base {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.28), rgba(70,70,70,0.72) 45%, rgba(20,20,20,0.78));
+    border: 4px solid white;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.4), inset 0 0 0 3px rgba(243,156,18,0.75);
+    touch-action: none;
+}
+
+#joystick-knob {
+    position: absolute;
+    width: 62px;
+    height: 62px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #ffffff, #55c7e8 45%, #2c8da7);
+    border: 3px solid white;
+    color: rgba(255,255,255,0.45);
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 5px 12px rgba(0,0,0,0.4);
+    touch-action: none;
+}
+
+#attack-button {
+    position: absolute;
+    right: 25px;
+    bottom: 38px;
+    width: 82px;
+    height: 82px;
+    z-index: 50;
+    border-radius: 50%;
+    border: 4px solid white;
+    background: radial-gradient(circle at 35% 30%, #ff6b68, #e53935 55%, #a71f1d);
+    color: white;
+    font-size: 34px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.42), inset 0 0 0 3px rgba(255,255,255,0.22);
+    touch-action: none;
+}
+
+/* ================= ESTILO VISUAL TEMPORADA ================= */
+
+#season {
+    position: fixed;
+    inset: 0;
+    display: none;
+    z-index: 450;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.16) 0 3px, transparent 4px),
+        radial-gradient(circle at 80% 70%, rgba(229,57,53,0.13) 0 4px, transparent 5px),
+        #f4d03f;
+    background-size: 52px 52px, 68px 68px, auto;
+    overflow: hidden;
+}
+
+#close-season {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 48px;
+    height: 48px;
+    background: red;
+    color: white;
+    border: 3px solid white;
+    border-radius: 8px;
+    font-size: 23px;
+    font-weight: bold;
+    z-index: 20;
+    box-shadow: 0 5px 0 rgba(0,0,0,0.18);
+}
+
+#season-categories {
+    position: absolute;
+    top: 50%;
+    left: 22px;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    z-index: 20;
+}
+
+.season-category {
+    min-width: 105px;
+    background: #e53935;
+    color: #f4d03f;
+    border: 3px solid white;
+    border-radius: 11px;
+    padding: 12px 18px;
+    font-size: 20px;
+    font-weight: bold;
+    box-shadow: 0 5px 0 rgba(0,0,0,0.15);
+    transition: transform 0.15s ease;
+}
+
+.season-category:hover {
+    transform: translateX(3px);
+}
+
+.season-section {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 25px 75px 155px;
+    box-sizing: border-box;
+}
+
+.season-title {
+    color: white;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(30px, 5vw, 52px);
+    font-weight: bold;
+    letter-spacing: 3px;
+    text-shadow: 3px 3px 0 rgba(0,0,0,0.16);
+    margin-bottom: 18px;
+}
+
+.season-reward-card {
+    width: min(380px, 65vw);
+    padding: 20px 24px 24px;
+    background: rgba(85,199,232,0.92);
+    border: 4px solid white;
+    border-radius: 24px;
+    box-shadow: 0 9px 0 rgba(0,0,0,0.17);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.season-reward-image {
+    width: min(245px, 50vw);
+    height: min(245px, 50vw);
+    background: white;
+    border: 5px solid white;
+    border-radius: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: clamp(105px, 18vw, 155px);
+    box-shadow: inset 0 0 0 4px rgba(244,208,63,0.5);
+}
+
+.season-reward-name {
+    margin-top: 17px;
+    color: white;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(22px, 3vw, 30px);
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.15);
+}
+
+.season-status-button {
+    display: none;
+    margin-top: 12px;
+    min-width: 170px;
+    background: #d9d9d9;
+    color: #666;
+    border: 3px solid white;
+    border-radius: 11px;
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    box-shadow: none;
+    cursor: default;
+}
+
+.season-counter {
+    position: absolute;
+    bottom: 22px;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 150px;
+    padding: 8px 20px;
+    background: #55c7e8;
+    color: white;
+    border: 4px solid white;
+    border-radius: 14px;
+    box-shadow: 0 5px 0 rgba(0,0,0,0.15);
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#season-reward-popup {
+    position: fixed;
+    inset: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,0.22);
+    z-index: 900;
+}
+
+#season-reward-box {
+    position: relative;
+    width: min(520px, 86%);
+    padding: 60px 30px 45px;
+    box-sizing: border-box;
+    background: #4caf50;
+    color: white;
+    border: 5px solid white;
+    border-radius: 22px;
+    box-shadow: 0 10px 0 rgba(0,0,0,0.22);
+    text-align: center;
+}
+
+#close-season-reward {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    width: 43px;
+    height: 43px;
+    background: red;
+    color: white;
+    border: 3px solid white;
+    border-radius: 8px;
+    font-size: 21px;
+    font-weight: bold;
+}
+
+#season-reward-text {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(25px, 5vw, 38px);
+    font-weight: bold;
+    line-height: 1.25;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.15);
+}
+
+@media (max-width: 600px) {
+    #movement-controls { left: 16px; bottom: 18px; width: 125px; height: 125px; }
+    #joystick-knob { width: 56px; height: 56px; }
+    #attack-button { right: 18px; bottom: 28px; width: 74px; height: 74px; font-size: 30px; }
+}
+
+/* ================= VICTORIA ================= */
+
+#victory-screen {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at center, #4bc5e7 0%, #278bad 72%, #176b82 100%);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+#victory-screen::before {
+    content: "";
+    position: absolute;
+    width: min(520px, 82%);
+    height: 360px;
+    border: 4px solid #f4d03f;
+    border-radius: 28px;
+    background: rgba(0,0,0,0.14);
+    box-shadow: 0 0 0 4px white, 0 18px 45px rgba(0,0,0,0.3), inset 0 0 30px rgba(255,255,255,0.1);
+}
+
+#victory-screen h1,
+#victory-screen p,
+#victory-screen #back-menu-button {
+    position: relative;
+    z-index: 1;
+}
+
+#victory-screen h1 {
+    color: #f4d03f;
+    font-family: Impact, Haettenschweiler, "Arial Narrow Bold", Arial, sans-serif;
+    font-size: clamp(55px, 9vw, 78px);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin: 0 0 22px;
+    text-shadow: 3px 3px 0 white, 6px 7px 0 rgba(0,0,0,0.22);
+}
+
+#victory-screen p {
+    color: white;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 24px;
+    margin: 7px;
+    font-weight: bold;
+    text-shadow: 0 3px 5px rgba(0,0,0,0.25);
+}
+
+#back-menu-button,
+#back-menu-defeat {
+    margin-top: 25px;
+    background: linear-gradient(180deg, #f4d03f, #d99e0b);
+    color: white;
+    border: 3px solid white;
+    border-radius: 12px;
+    padding: 13px 32px;
+    font-size: 20px;
+    font-weight: bold;
+    box-shadow: 0 5px 0 #9f7300, 0 8px 16px rgba(0,0,0,0.25);
+}
+
+/* ================= DERROTA ================= */
+
+#defeat-screen {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at center, #6c7f88 0%, #34434a 65%, #20292d 100%);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+#defeat-screen::before {
+    content: "";
+    position: absolute;
+    width: min(520px, 82%);
+    height: 360px;
+    border: 4px solid #e53935;
+    border-radius: 28px;
+    background: rgba(0,0,0,0.22);
+    box-shadow: 0 0 0 4px white, 0 18px 45px rgba(0,0,0,0.38), inset 0 0 30px rgba(255,255,255,0.05);
+}
+
+#defeat-screen h1,
+#defeat-screen p,
+#defeat-screen #back-menu-defeat {
+    position: relative;
+    z-index: 1;
+}
+
+#defeat-screen h1 {
+    color: #e53935;
+    font-family: Impact, Haettenschweiler, "Arial Narrow Bold", Arial, sans-serif;
+    font-size: clamp(55px, 9vw, 78px);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin: 0 0 22px;
+    text-shadow: 3px 3px 0 white, 6px 7px 0 rgba(0,0,0,0.3);
+}
+
+#defeat-screen p {
+    color: white;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 24px;
+    margin: 7px;
+    font-weight: bold;
+    text-shadow: 0 3px 5px rgba(0,0,0,0.3);
+}
+
+#back-menu-defeat {
+    background: linear-gradient(180deg, #55c7e8, #278bad);
+    box-shadow: 0 5px 0 #176b82, 0 8px 16px rgba(0,0,0,0.28);
+}
+/* ================= ESTILO VISUAL MENU / MERCADO ================= */
+
+/* El estilo visual se mantiene dentro de la paleta original de ARENA'S:
+   amarillo, celeste, rojo, blanco y verde. Solo se modifica la apariencia. */
+
+#menu {
+    background:
+        radial-gradient(circle at 50% 38%, rgba(255,255,255,0.20) 0 3px, transparent 4px),
+        linear-gradient(135deg, #f4d03f 0%, #f4d03f 55%, rgba(229,57,53,0.16) 55%, rgba(229,57,53,0.16) 100%);
+    background-size: 42px 42px, 100% 100%;
+}
+
+#menu::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 72px;
+    transform: translateX(-50%);
+    width: min(620px, 82%);
+    height: 5px;
+    background: #55c7e8;
+    border: 2px solid white;
+    border-radius: 10px;
+    opacity: 0.95;
+}
+
+#menu::after {
+    content: "ARENA'S";
+    position: absolute;
+    left: 50%;
+    top: 18px;
+    transform: translateX(-50%);
+    color: white;
+    font-family: Trebuchet MS, Arial, sans-serif;
+    font-size: clamp(28px, 6vw, 48px);
+    font-weight: 900;
+    letter-spacing: 5px;
+    text-shadow: 3px 3px 0 #e53935;
+    pointer-events: none;
+}
+
+#profile-button,
+#market-button,
+#ranks-button,
+#inventory-button,
+#season-button {
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 5px 0 rgba(0,0,0,0.18);
+}
+
+#profile-button {
+    top: 92px;
+    left: 20px;
+    border-radius: 12px;
+    padding: 11px 20px;
+    z-index: 5;
+}
+
+#pearls {
+    top: 92px;
+    right: 20px;
+    background: #55c7e8;
+    border: 3px solid white;
+    border-radius: 12px;
+    padding: 10px 16px;
+    box-shadow: 0 5px 0 rgba(0,0,0,0.18);
+    z-index: 5;
+}
+
+#current-character {
+    top: 135px;
+    width: 190px;
+    height: 130px;
+    background: rgba(255,255,255,0.18);
+    border: 4px solid white;
+    border-radius: 28px;
+    box-shadow: 0 8px 0 rgba(0,0,0,0.12), inset 0 0 0 3px rgba(85,199,232,0.45);
+    z-index: 2;
+}
+
+#current-skin {
+    top: 7px;
+    font-size: 82px;
+}
+
+#current-weapon {
+    top: 49px;
+    left: calc(50% + 35px);
+}
+
+#campaign-button {
+    top: 295px;
+    min-width: 270px;
+    padding: 16px 45px;
+    border-radius: 16px;
+    border-width: 4px;
+    box-shadow: 0 7px 0 rgba(0,0,0,0.18), inset 0 0 0 2px rgba(255,255,255,0.20);
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.15);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    z-index: 5;
+}
+
+#market-button,
+#ranks-button,
+#inventory-button,
+#season-button {
+    bottom: 24px;
+    padding: 11px 20px;
+    border-radius: 12px;
+    z-index: 5;
+}
+
+#market-button { left: 20px; }
+#ranks-button { left: 145px; }
+#inventory-button { left: 270px; }
+#season-button { left: 425px; }
+
+#profile-button:hover,
+#market-button:hover,
+#ranks-button:hover,
+#inventory-button:hover,
+#season-button:hover,
+#campaign-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 0 rgba(0,0,0,0.18);
+}
+
+#campaign-button:hover {
+    transform: translateX(-50%) translateY(-2px);
+}
+
+#profile-button:active,
+#market-button:active,
+#ranks-button:active,
+#inventory-button:active,
+#season-button:active,
+#campaign-button:active {
+    transform: translateY(3px);
+    box-shadow: 0 2px 0 rgba(0,0,0,0.18);
+}
+
+#campaign-button:active {
+    transform: translateX(-50%) translateY(3px);
+}
+
+/* ================= ESTILO VISUAL MERCADO ================= */
+
+#market {
+    background:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.16) 0 3px, transparent 4px),
+        radial-gradient(circle at 80% 70%, rgba(229,57,53,0.13) 0 4px, transparent 5px),
+        #f4d03f;
+    background-size: 52px 52px, 68px 68px, auto;
+}
+
+#market-categories {
+    top: 20px;
+    gap: 12px;
+    padding: 7px;
+    background: rgba(85,199,232,0.55);
+    border: 3px solid white;
+    border-radius: 16px;
+    box-shadow: 0 6px 0 rgba(0,0,0,0.15);
+}
+
+.market-category {
+    border-radius: 11px;
+    padding: 11px 30px;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+    transition: transform 0.15s ease;
+}
+
+.market-category:hover {
+    transform: translateY(-2px);
+}
+
+#market-section,
+.market-section {
+    padding-left: 18px;
+    padding-right: 18px;
+}
+
+.market-item {
+    width: min(360px, 92%);
+    margin: 0 auto 38px;
+    padding: 18px 18px 20px;
+    background: rgba(85,199,232,0.90);
+    border: 4px solid white;
+    border-radius: 20px;
+    box-shadow: 0 7px 0 rgba(0,0,0,0.15);
+}
+
+.market-image {
+    width: 175px;
+    height: 175px;
+    border: 4px solid white;
+    border-radius: 18px;
+    box-shadow: inset 0 0 0 3px rgba(244,208,63,0.45);
+}
+
+.market-name {
+    margin-top: 13px;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.12);
+}
+
+.market-price {
+    background: #f4d03f;
+    color: white;
+    border: 3px solid white;
+    border-radius: 10px;
+    padding: 5px 12px;
+    margin-top: 8px;
+}
+
+.market-buy-button {
+    margin-top: 12px;
+    min-width: 170px;
+    border-radius: 11px;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.market-buy-button:hover {
+    transform: translateY(-2px);
+}
+
+.market-buy-button:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.15);
+}
+
+#close-market {
+    box-shadow: 0 5px 0 rgba(0,0,0,0.18);
+}
+
+/* ================= ESTILO VISUAL INVENTARIO ================= */
+
+#inventory {
+    position: fixed;
+    inset: 0;
+    display: none;
+    z-index: 400;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.16) 0 3px, transparent 4px),
+        radial-gradient(circle at 80% 70%, rgba(244,208,63,0.13) 0 4px, transparent 5px),
+        #55c7e8;
+    background-size: 52px 52px, 68px 68px, auto;
+}
+
+#close-inventory {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 48px;
+    height: 48px;
+    background: red;
+    color: white;
+    border: 3px solid white;
+    border-radius: 8px;
+    font-size: 23px;
+    font-weight: bold;
+    z-index: 20;
+    box-shadow: 0 5px 0 rgba(0,0,0,0.18);
+}
+
+#inventory-categories {
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 20;
+    padding: 7px;
+    background: rgba(244,208,63,0.55);
+    border: 3px solid white;
+    border-radius: 16px;
+    box-shadow: 0 6px 0 rgba(0,0,0,0.15);
+}
+
+.inventory-category {
+    background: #e53935;
+    color: #55c7e8;
+    border: 3px solid white;
+    border-radius: 11px;
+    padding: 11px 30px;
+    font-size: 20px;
+    font-weight: bold;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+    transition: transform 0.15s ease;
+}
+
+.inventory-category:hover {
+    transform: translateY(-2px);
+}
+
+.inventory-section {
+    position: absolute;
+    top: 105px;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 105px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-bottom: 40px;
+}
+
+.inventory-section::-webkit-scrollbar {
+    width: 12px;
+}
+
+.inventory-section::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.4);
+}
+
+.inventory-section::-webkit-scrollbar-thumb {
+    background: #f4d03f;
+    border: 2px solid white;
+    border-radius: 10px;
+}
+
+.inventory-item {
+    width: min(360px, 92%);
+    margin: 0 auto 38px;
+    padding: 18px 18px 20px;
+    background: rgba(244,208,63,0.90);
+    border: 4px solid white;
+    border-radius: 20px;
+    box-shadow: 0 7px 0 rgba(0,0,0,0.15);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.inventory-image {
+    width: 175px;
+    height: 175px;
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 4px solid white;
+    border-radius: 18px;
+    box-shadow: inset 0 0 0 3px rgba(85,199,232,0.45);
+    font-size: 100px;
+}
+
+.inventory-name {
+    margin-top: 13px;
+    color: white;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 24px;
+    font-weight: bold;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.12);
+}
+
+.inventory-equip-button {
+    margin-top: 12px;
+    min-width: 170px;
+    background: #f4d03f;
+    color: white;
+    border: 3px solid white;
+    border-radius: 11px;
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.inventory-equip-button:hover {
+    transform: translateY(-2px);
+}
+
+.inventory-equip-button:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.15);
+}
+
+.inventory-equip-button.equipped {
+    background: #4caf50;
+}
+
+@media (max-width: 600px) {
+    #menu::after {
+        letter-spacing: 3px;
+    }
+
+    #profile-button {
+        top: 92px;
+        left: 12px;
+        font-size: 16px;
+        padding: 9px 14px;
+    }
+
+    #pearls {
+        top: 92px;
+        right: 12px;
+        font-size: 16px;
+        padding: 9px 12px;
+    }
+
+    #current-character {
+        top: 135px;
+        width: 170px;
+        height: 120px;
+    }
+
+    #campaign-button {
+        top: 285px;
+        min-width: 245px;
+        font-size: 25px;
+    }
+
+    #market-button,
+    #ranks-button,
+    #inventory-button,
+    #season-button {
+        bottom: 18px;
+        font-size: 14px;
+        padding: 9px 8px;
+    }
+
+    #market-button {
+        left: 8px;
+    }
+
+    #ranks-button {
+        left: 88px;
+    }
+
+    #inventory-button {
+        left: 166px;
+    }
+
+    #season-button {
+        left: 285px;
+    }
+
+    #market-categories {
+        gap: 7px;
+        padding: 6px;
+    }
+
+    .market-category {
+        padding: 10px 20px;
+        font-size: 18px;
+    }
+
+    .market-item {
+        width: min(340px, 92%);
+    }
+
+    .inventory-category {
+        padding: 10px 20px;
+        font-size: 18px;
+    }
+
+    .inventory-item {
+        width: min(340px, 92%);
+    }
+
+    #season-categories {
+        left: 10px;
+        gap: 12px;
+    }
+
+    .season-category {
+        min-width: 76px;
+        padding: 10px 12px;
+        font-size: 17px;
+    }
+
+    .season-section {
+        padding-left: 105px;
+        padding-right: 15px;
+        padding-bottom: 65px;
+    }
+
+    .season-reward-card {
+        width: min(300px, 72vw);
+        padding: 15px 15px 18px;
+    }
+
+    .season-reward-image {
+        width: min(190px, 47vw);
+        height: min(190px, 47vw);
+        font-size: clamp(90px, 22vw, 125px);
+    }
+
+    .season-reward-name {
+        font-size: 20px;
+    }
+
+    .season-counter {
+        bottom: 16px;
+        min-width: 120px;
+        font-size: 24px;
+    }
+
+    #season-reward-box {
+        padding: 55px 20px 35px;
+    }
+}
+
+
+</style>
+</head>
+
+<body>
+
+<!-- ================= SPLASH ================= -->
+
+<div id="splash">
+    <h1>ARENA'S</h1>
+</div>
+
+<!-- ================= NOMBRE ================= -->
+
+<div id="name-screen">
+
+    <div id="name-warning">
+        Debes escribir tu nombre de guerrero para continuar
+    </div>
+
+    <h2>Escribe tu nombre de guerrero</h2>
+
+    <input id="name-input" type="text" maxlength="25">
+
+    <button id="continue-button">
+        Continuar
+    </button>
+
+</div>
+
+<!-- ================= MENU ================= -->
+
+<div id="menu">
+
+    <button id="settings-button" type="button" aria-label="Configuración">
+        ⚙️
+    </button>
+
+    <button id="profile-button">
+        Perfil
+    </button>
+
+    <div id="pearls">
+        Perlas: 0
+    </div>
+
+    <div id="current-character">
+
+        <div id="current-skin">
+            🙂
+        </div>
+
+        <div id="current-weapon">
+            ⚔️
+        </div>
+
+    </div>
+
+    <button id="campaign-button">
+        Campaña
+    </button>
+
+    <button id="market-button">
+        Mercado
+    </button>
+
+    <button id="ranks-button">
+        Rangos
+    </button>
+
+    <button id="inventory-button">
+        Inventario
+    </button>
+
+    <button id="season-button">
+        Temporada
+    </button>
+
+</div>
+
+<!-- ================= CONFIGURACION ================= -->
+
+<div id="settings-panel">
+
+    <button id="close-settings" type="button">
+        X
+    </button>
+
+    <div id="settings-title">
+        Configuración
+    </div>
+
+    <div id="settings-content">
+        <button id="language-button" type="button">
+            Idioma
+        </button>
+
+        <div id="language-options">
+            <button class="language-option" data-language="es" type="button">
+                Español
+            </button>
+            <button class="language-option" data-language="en" type="button">
+                English
+            </button>
+        </div>
+
+        <div id="firebase-account">
+            <div id="firebase-account-title">Cuenta Google</div>
+            <button id="firebase-signin-button" class="firebase-account-button" type="button">
+                Vincular con Google
+            </button>
+            <button id="firebase-login-button" class="firebase-account-button" type="button">
+                Iniciar sesión
+            </button>
+            <div id="firebase-account-status"></div>
+            <button id="firebase-cloud-restore-button" class="firebase-account-button" type="button" style="display:none;">
+                Restaurar progreso de la nube
+            </button>
+            <button id="firebase-signout-button" class="firebase-account-button" type="button" style="display:none;">
+                Cerrar sesión
+            </button>
+        </div>
+    </div>
+
+</div>
+
+<!-- ================= PERFIL ================= -->
+
+<div id="profile-panel">
+
+    <button id="close-profile" type="button">
+        X
+    </button>
+
+    <div id="profile-info">
+
+        <div id="profile-name">
+            Nombre:
+        </div>
+
+        <div>
+            Medallones:
+            <span id="profile-medallions">0</span>
+        </div>
+
+        <div>
+            Rango:
+            <span id="profile-rank">Principiante</span>
+        </div>
+
+        <div id="profile-titles">
+
+            <span id="profile-titles-label">
+                Titulos:
+            </span>
+
+            <div id="profile-title-medals">
+                <span id="no-titles">0</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= CARTEL SUBIDA DE RANGO ================= -->
+
+<div id="rank-up-screen">
+
+    <div id="rank-up-box">
+
+        <button id="close-rank-up" type="button">
+            X
+        </button>
+
+        <div id="rank-up-message">
+            FELICIDADES!<br>
+            SUBISTE DE RANGO
+        </div>
+
+        <div id="rank-up-new-rank">
+            Nuevo rango:
+            <span id="rank-up-rank-name"></span>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= RANGOS ================= -->
+
+<div id="ranks-screen">
+
+    <button id="close-ranks" type="button">
+        X
+    </button>
+
+    <div id="ranks-content">
+
+        <h1 id="ranks-title">
+            Rangos
+        </h1>
+
+        <p id="ranks-subtitle">
+            Consigue Medallones para subir de rango
+        </p>
+
+        <div class="rank-item">
+            <span class="rank-medallions">5 Medallones</span>
+            <span class="rank-name">Principiante II</span>
+        </div>
+
+        <div class="rank-item">
+            <span class="rank-medallions">10 Medallones</span>
+            <span class="rank-name">Principiante III</span>
+        </div>
+
+        <div class="rank-item">
+            <span class="rank-medallions">15 Medallones</span>
+            <span class="rank-name">Guerrero</span>
+        </div>
+
+        <div class="rank-item">
+            <span class="rank-medallions">20 Medallones</span>
+            <span class="rank-name">Guerrero II</span>
+        </div>
+
+        <div class="rank-item">
+            <span class="rank-medallions">25 Medallones</span>
+            <span class="rank-name">Guerrero III</span>
+        </div>
+
+        <div class="rank-item">
+            <span class="rank-medallions">40 Medallones</span>
+            <span class="rank-name">General</span>
+        </div>
+
+        <div class="rank-item">
+            <span class="rank-medallions">50 Medallones</span>
+            <span class="rank-name">General II</span>
+        </div>
+
+        <div class="rank-item">
+            <span class="rank-medallions">60 Medallones</span>
+            <span class="rank-name">General III</span>
+        </div>
+
+        <div class="rank-item">
+            <span class="rank-medallions">70 Medallones</span>
+            <span class="rank-name">General IV</span>
+        </div>
+
+        <div class="rank-item">
+            <span class="rank-medallions">80 Medallones</span>
+            <span class="rank-name">General V</span>
+        </div>
+
+        <div class="rank-item">
+            <span class="rank-medallions">90 Medallones</span>
+            <span class="rank-name">Profesional</span>
+        </div>
+
+        <div class="rank-item">
+            <span class="rank-medallions">100 Medallones</span>
+            <span class="rank-name">Profesional II</span>
+        </div>
+
+        <div class="rank-item">
+            <span class="rank-medallions">110 Medallones</span>
+            <span class="rank-name">Profesional III</span>
+        </div>
+
+        <div class="rank-item">
+            <span class="rank-medallions">120 Medallones</span>
+            <span class="rank-name">Profesional IV</span>
+        </div>
+
+        <div class="rank-item">
+            <span class="rank-medallions">130 Medallones</span>
+            <span class="rank-name">Profesional V</span>
+        </div>
+
+        <div class="rank-item">
+            <span class="rank-medallions">150 Medallones</span>
+            <span class="rank-name">Heroe</span>
+        </div>
+
+        <div class="rank-item">
+            <span class="rank-medallions">200 Medallones</span>
+            <span class="rank-name">Heroe II</span>
+        </div>
+
+        <div class="rank-item">
+            <span class="rank-medallions">250 Medallones</span>
+            <span class="rank-name">Heroe III</span>
+        </div>
+
+        <div class="rank-item">
+            <span class="rank-medallions">300 Medallones</span>
+            <span class="rank-name">Heroe IV</span>
+        </div>
+
+        <div class="rank-item">
+            <span class="rank-medallions">350 Medallones</span>
+            <span class="rank-name">Heroe V</span>
+        </div>
+
+        <div class="rank-item">
+            <span class="rank-medallions">500 Medallones</span>
+            <span class="rank-name">Semidios</span>
+        </div>
+
+        <div class="rank-item rank-max">
+            <span class="rank-medallions">700 Medallones</span>
+            <span class="rank-name">Dios — Rango Máximo</span>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= MERCADO ================= -->
+
+<div id="market">
+
+    <button id="close-market">
+        X
+    </button>
+
+    <div id="market-categories">
+
+        <button id="skins-button" class="market-category">
+            Pieles
+        </button>
+
+        <button id="weapons-button" class="market-category">
+            Armas
+        </button>
+
+    </div>
+
+    <div id="skins-section" class="market-section">
+
+        <div class="market-item">
+
+            <div class="market-image">
+                🙂
+            </div>
+
+            <div class="market-name">
+                Principiante
+            </div>
+
+            <button id="beginner-skin-button"
+                    class="market-buy-button equipped">
+                Equipado
+            </button>
+
+        </div>
+
+        <div class="market-item">
+
+            <div class="market-image">
+                🐻
+            </div>
+
+            <div class="market-name">
+                Cazador de Osos
+            </div>
+
+            <div id="bear-skin-price"
+                 class="market-price">
+                150 Perlas
+            </div>
+
+            <button id="bear-skin-button"
+                    class="market-buy-button">
+                Comprar
+            </button>
+
+        </div>
+
+        <div class="market-item">
+
+            <div class="market-image">
+                😎
+            </div>
+
+            <div class="market-name">
+                Verano
+            </div>
+
+            <div id="summer-skin-price"
+                 class="market-price">
+                200 Perlas
+            </div>
+
+            <button id="summer-skin-button"
+                    class="market-buy-button">
+                Comprar
+            </button>
+
+        </div>
+
+        <div class="market-item">
+
+            <div class="market-image">
+                😶‍🌫️
+            </div>
+
+            <div class="market-name">
+                Chico Timido
+            </div>
+
+            <div id="shy-skin-price"
+                 class="market-price">
+                300 Perlas
+            </div>
+
+            <button id="shy-skin-button"
+                    class="market-buy-button">
+                Comprar
+            </button>
+
+        </div>
+
+    </div>
+
+    <div id="weapons-section"
+         class="market-section"
+         style="display:none;">
+
+        <div class="market-item">
+
+            <div class="market-image">
+                👊
+            </div>
+
+            <div class="market-name">
+                Puño
+            </div>
+
+            <button id="fist-weapon-button"
+                    class="market-buy-button equipped">
+                Equipado
+            </button>
+
+        </div>
+
+        <div class="market-item">
+
+            <div class="market-image">
+                ⚔️
+            </div>
+
+            <div class="market-name">
+                Espada
+            </div>
+
+            <div id="sword-price"
+                 class="market-price">
+                130 Perlas
+            </div>
+
+            <button id="sword-button"
+                    class="market-buy-button">
+                Comprar
+            </button>
+
+        </div>
+
+        <div class="market-item">
+
+            <div class="market-image">
+                🔫
+            </div>
+
+            <div class="market-name">
+                Pistola
+            </div>
+
+            <div id="pistol-price"
+                 class="market-price">
+                160 Perlas
+            </div>
+
+            <button id="pistol-button"
+                    class="market-buy-button">
+                Comprar
+            </button>
+
+        </div>
+
+        <div class="market-item">
+
+            <div class="market-image">
+                🪓
+            </div>
+
+            <div class="market-name">
+                Hacha
+            </div>
+
+            <div id="axe-price"
+                 class="market-price">
+                215 Perlas
+            </div>
+
+            <button id="axe-button"
+                    class="market-buy-button">
+                Comprar
+            </button>
+
+        </div>
+
+        <div class="market-item">
+
+            <div class="market-image">
+                🏹
+            </div>
+
+            <div class="market-name">
+                Arco
+            </div>
+
+            <div id="bow-price"
+                 class="market-price">
+                300 Perlas
+            </div>
+
+            <button id="bow-button"
+                    class="market-buy-button">
+                Comprar
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= INVENTARIO ================= -->
+
+<div id="inventory">
+
+    <button id="close-inventory">
+        X
+    </button>
+
+    <div id="inventory-categories">
+        <button id="inventory-skins-button" class="inventory-category">
+            Pieles
+        </button>
+        <button id="inventory-weapons-button" class="inventory-category">
+            Armas
+        </button>
+    </div>
+
+    <div id="inventory-skins-section" class="inventory-section">
+
+        <div class="inventory-item">
+            <div class="inventory-image">🙂</div>
+            <div class="inventory-name">Principiante</div>
+            <button id="inventory-beginner-skin-button" class="inventory-equip-button">Equipar</button>
+        </div>
+
+        <div class="inventory-item">
+            <div class="inventory-image">🐻</div>
+            <div class="inventory-name">Cazador de Osos</div>
+            <button id="inventory-bear-skin-button" class="inventory-equip-button">Equipar</button>
+        </div>
+
+        <div class="inventory-item">
+            <div class="inventory-image">😎</div>
+            <div class="inventory-name">Verano</div>
+            <button id="inventory-summer-skin-button" class="inventory-equip-button">Equipar</button>
+        </div>
+
+        <div class="inventory-item">
+            <div class="inventory-image">😶‍🌫️</div>
+            <div class="inventory-name">Chico Timido</div>
+            <button id="inventory-shy-skin-button" class="inventory-equip-button">Equipar</button>
+        </div>
+
+        <div class="inventory-item" id="inventory-season-skin-item">
+            <div class="inventory-image">🤡</div>
+            <div class="inventory-name">Bromista</div>
+            <button id="inventory-season-skin-button" class="inventory-equip-button">Equipar</button>
+        </div>
+
+    </div>
+
+    <div id="inventory-weapons-section" class="inventory-section" style="display:none;">
+
+        <div class="inventory-item">
+            <div class="inventory-image">👊</div>
+            <div class="inventory-name">Puño</div>
+            <button id="inventory-fist-weapon-button" class="inventory-equip-button">Equipar</button>
+        </div>
+
+        <div class="inventory-item">
+            <div class="inventory-image">⚔️</div>
+            <div class="inventory-name">Espada</div>
+            <button id="inventory-sword-button" class="inventory-equip-button">Equipar</button>
+        </div>
+
+        <div class="inventory-item">
+            <div class="inventory-image">🔫</div>
+            <div class="inventory-name">Pistola</div>
+            <button id="inventory-pistol-button" class="inventory-equip-button">Equipar</button>
+        </div>
+
+        <div class="inventory-item">
+            <div class="inventory-image">🪓</div>
+            <div class="inventory-name">Hacha</div>
+            <button id="inventory-axe-button" class="inventory-equip-button">Equipar</button>
+        </div>
+
+        <div class="inventory-item">
+            <div class="inventory-image">🏹</div>
+            <div class="inventory-name">Arco</div>
+            <button id="inventory-bow-button" class="inventory-equip-button">Equipar</button>
+        </div>
+
+        <div class="inventory-item" id="inventory-season-weapon-item">
+            <div class="inventory-image">🎈</div>
+            <div class="inventory-name">Globo</div>
+            <button id="inventory-season-weapon-button" class="inventory-equip-button">Equipar</button>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= TEMPORADA ================= -->
+
+<div id="season">
+
+    <button id="close-season">
+        X
+    </button>
+
+    <div id="season-categories">
+        <button id="season-skin-button" class="season-category">
+            Piel
+        </button>
+        <button id="season-weapon-button" class="season-category">
+            Arma
+        </button>
+    </div>
+
+    <div id="season-skin-section" class="season-section">
+        <div class="season-title">TEMPORADA 1</div>
+        <div class="season-reward-card">
+            <div class="season-reward-image">🤡</div>
+            <div class="season-reward-name">PIEL DEL BROMISTA</div>
+            <button id="season-skin-status" class="season-status-button">Obtenido</button>
+        </div>
+        <div id="season-skin-counter" class="season-counter">0/15</div>
+    </div>
+
+    <div id="season-weapon-section" class="season-section" style="display:none;">
+        <div class="season-title">TEMPORADA 1</div>
+        <div class="season-reward-card">
+            <div class="season-reward-image">🎈</div>
+            <div class="season-reward-name">ARMA DEL GLOBO</div>
+            <button id="season-weapon-status" class="season-status-button">Obtenido</button>
+        </div>
+        <div id="season-weapon-counter" class="season-counter">0/10</div>
+    </div>
+
+</div>
+
+<!-- ================= CARTEL RECOMPENSA TEMPORADA ================= -->
+
+<div id="season-reward-popup">
+    <div id="season-reward-box">
+        <button id="close-season-reward">
+            X
+        </button>
+        <div id="season-reward-text"></div>
+    </div>
+</div>
+
+<!-- ================= POPUP PERLAS ================= -->
+
+<div id="not-enough-pearls">
+
+    <div id="not-enough-box">
+
+        <button id="close-not-enough">
+            X
+        </button>
+
+        <div id="not-enough-pearls-text">
+            No tienes suficientes Perlas
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= LOADING ================= -->
+
+<div id="loading">
+    <h1>Cargando...</h1>
+</div>
+
+<!-- ================= GAME ================= -->
+
+<div id="game">
+
+    <div id="arena-ground"></div>
+
+    <div id="lives-container">
+        <span id="life1">❤️</span>
+        <span id="life2">❤️</span>
+        <span id="life3">❤️</span>
+    </div>
+
+    <button id="pause-button">
+        ⏸️
+    </button>
+
+    <div id="player">
+
+        <div id="player-skin">
+            🙂
+        </div>
+
+        <div id="player-weapon">
+            ⚔️
+        </div>
+
+    </div>
+
+    <div id="movement-controls">
+        <div id="joystick-base">
+            <div id="joystick-knob">●</div>
+        </div>
+    </div>
+
+    <button id="attack-button">
+        ⚔️
+    </button>
+
+</div>
+
+<!-- ================= PAUSA ================= -->
+
+<div id="pause-panel">
+
+    <button id="resume-button"
+            class="pause-action">
+        Reanudar
+    </button>
+
+    <button id="pause-menu-button"
+            class="pause-action">
+        Ir al menu
+    </button>
+
+</div>
+
+<!-- ================= VICTORIA ================= -->
+
+<div id="victory-screen">
+
+    <h1>Ganaste!</h1>
+
+    <p>+1 Medallones</p>
+    <p>+50 Perlas</p>
+
+    <button id="back-menu-button">
+        Volver al menu
+    </button>
+
+</div>
+
+<!-- ================= DERROTA ================= -->
+
+<div id="defeat-screen">
+
+    <h1>Perdiste</h1>
+
+    <p>-1 Medallones</p>
+    <p>+15 Perlas</p>
+
+    <button id="back-menu-defeat">
+        Volver al menu
+    </button>
+
+</div>
+
+<script>
+
+/* ================= VARIABLES ================= */
+
+let playerPosition = { x: 50, y: 50 };
+const movementSpeed = 0.42;
+let joystickActive = false;
+let joystickX = 0;
+let joystickY = 0;
+
+let pearlsAmount = 0;
+let medallionsAmount = 0;
+
+let enemies = [];
+let enemyId = 0;
+
+let enemiesKilled = 0;
+let enemiesNeeded = 10;
+
+let gameFinished = true;
+let lives = 3;
+let gamePaused = false;
+
+let spawnTimeout = null;
+let spawnTimerStart = 0;
+let spawnTimerRemaining = 0;
+
+let playerMovingLeft = false;
+let playerMovingRight = false;
+
+let playerName = "";
+
+/* ================= SISTEMA DE RANGOS ================= */
+
+const rankThresholds = [
+
+    {
+        medals: 700,
+        name: "Dios"
+    },
+
+    {
+        medals: 500,
+        name: "Semidios"
+    },
+
+    {
+        medals: 350,
+        name: "Heroe V"
+    },
+
+    {
+        medals: 300,
+        name: "Heroe IV"
+    },
+
+    {
+        medals: 250,
+        name: "Heroe III"
+    },
+
+    {
+        medals: 200,
+        name: "Heroe II"
+    },
+
+    {
+        medals: 150,
+        name: "Heroe"
+    },
+
+    {
+        medals: 130,
+        name: "Profesional V"
+    },
+
+    {
+        medals: 120,
+        name: "Profesional IV"
+    },
+
+    {
+        medals: 110,
+        name: "Profesional III"
+    },
+
+    {
+        medals: 100,
+        name: "Profesional II"
+    },
+
+    {
+        medals: 90,
+        name: "Profesional"
+    },
+
+    {
+        medals: 80,
+        name: "General V"
+    },
+
+    {
+        medals: 70,
+        name: "General IV"
+    },
+
+    {
+        medals: 60,
+        name: "General III"
+    },
+
+    {
+        medals: 50,
+        name: "General II"
+    },
+
+    {
+        medals: 40,
+        name: "General"
+    },
+
+    {
+        medals: 25,
+        name: "Guerrero III"
+    },
+
+    {
+        medals: 20,
+        name: "Guerrero II"
+    },
+
+    {
+        medals: 15,
+        name: "Guerrero"
+    },
+
+    {
+        medals: 10,
+        name: "Principiante III"
+    },
+
+    {
+        medals: 5,
+        name: "Principiante II"
+    }
+
+];
+
+let currentRank = "Principiante";
+
+let titleMedals = 0;
+
+let pendingRankUp = false;
+let pendingSeasonReward = null;
+
+let previousRankBeforeWin = "Principiante";
+
+/* ================= PIELES ================= */
+
+const skins = {
+
+    beginner: {
+        name: "Principiante",
+        emoji: "🙂",
+        owned: true
+    },
+
+    bearHunter: {
+        name: "Cazador de Osos",
+        emoji: "🐻",
+        owned: false,
+        price: 150
+    },
+
+    summer: {
+        name: "Verano",
+        emoji: "😎",
+        owned: false,
+        price: 200
+    },
+
+    shyBoy: {
+        name: "Chico Timido",
+        emoji: "😶‍🌫️",
+        owned: false,
+        price: 300
+    }
+
+};
+
+let equippedSkin = "beginner";
+
+/* ================= ARMAS ================= */
+
+const weapons = {
+
+    fist: {
+        name: "Puño",
+        emoji: "👊",
+        owned: true
+    },
+
+    sword: {
+        name: "Espada",
+        emoji: "⚔️",
+        owned: false,
+        price: 130
+    },
+
+    pistol: {
+        name: "Pistola",
+        emoji: "🔫",
+        owned: false,
+        price: 160
+    },
+
+    axe: {
+        name: "Hacha",
+        emoji: "🪓",
+        owned: false,
+        price: 215
+    },
+
+    bow: {
+        name: "Arco",
+        emoji: "🏹",
+        owned: false,
+        price: 300
+    }
+
+};
+
+let equippedWeapon = "fist";
+
+/* ================= ELEMENTOS ================= */
+
+const splash = document.getElementById("splash");
+
+const nameScreen =
+    document.getElementById("name-screen");
+
+const nameInput =
+    document.getElementById("name-input");
+
+const continueButton =
+    document.getElementById("continue-button");
+
+const nameWarning =
+    document.getElementById("name-warning");
+
+const menu =
+    document.getElementById("menu");
+
+const profileButton =
+    document.getElementById("profile-button");
+
+const profilePanel =
+    document.getElementById("profile-panel");
+
+const closeProfile =
+    document.getElementById("close-profile");
+
+const profileName =
+    document.getElementById("profile-name");
+
+const profileMedallions =
+    document.getElementById("profile-medallions");
+
+const profileRank =
+    document.getElementById("profile-rank");
+
+const profileTitleMedals =
+    document.getElementById("profile-title-medals");
+
+const noTitles =
+    document.getElementById("no-titles");
+
+const pearls =
+    document.getElementById("pearls");
+
+const campaignButton =
+    document.getElementById("campaign-button");
+
+const marketButton =
+    document.getElementById("market-button");
+
+const ranksButton =
+    document.getElementById("ranks-button");
+
+const inventoryButton =
+    document.getElementById("inventory-button");
+
+const settingsButton =
+    document.getElementById("settings-button");
+
+const settingsPanel =
+    document.getElementById("settings-panel");
+
+const closeSettings =
+    document.getElementById("close-settings");
+
+const languageButton =
+    document.getElementById("language-button");
+
+const languageOptions =
+    document.getElementById("language-options");
+
+const languageOptionButtons =
+    document.querySelectorAll(".language-option");
+
+const ranksScreen =
+    document.getElementById("ranks-screen");
+
+const closeRanks =
+    document.getElementById("close-ranks");
+
+const rankUpScreen =
+    document.getElementById("rank-up-screen");
+
+const closeRankUp =
+    document.getElementById("close-rank-up");
+
+const rankUpRankName =
+    document.getElementById("rank-up-rank-name");
+
+const currentSkin =
+    document.getElementById("current-skin");
+
+const currentWeapon =
+    document.getElementById("current-weapon");
+
+const market =
+    document.getElementById("market");
+
+const closeMarket =
+    document.getElementById("close-market");
+
+const inventory =
+    document.getElementById("inventory");
+
+const closeInventory =
+    document.getElementById("close-inventory");
+
+const inventorySkinsButton =
+    document.getElementById("inventory-skins-button");
+
+const inventoryWeaponsButton =
+    document.getElementById("inventory-weapons-button");
+
+const inventorySkinsSection =
+    document.getElementById("inventory-skins-section");
+
+const inventoryWeaponsSection =
+    document.getElementById("inventory-weapons-section");
+
+const inventoryBeginnerSkinButton =
+    document.getElementById("inventory-beginner-skin-button");
+
+const inventoryBearSkinButton =
+    document.getElementById("inventory-bear-skin-button");
+
+const inventorySummerSkinButton =
+    document.getElementById("inventory-summer-skin-button");
+
+const inventoryShySkinButton =
+    document.getElementById("inventory-shy-skin-button");
+
+const inventoryFistWeaponButton =
+    document.getElementById("inventory-fist-weapon-button");
+
+const inventorySwordButton =
+    document.getElementById("inventory-sword-button");
+
+const inventoryPistolButton =
+    document.getElementById("inventory-pistol-button");
+
+const inventoryAxeButton =
+    document.getElementById("inventory-axe-button");
+
+const inventoryBowButton =
+    document.getElementById("inventory-bow-button");
+
+const inventorySeasonSkinItem =
+    document.getElementById("inventory-season-skin-item");
+
+const inventorySeasonSkinButton =
+    document.getElementById("inventory-season-skin-button");
+
+const inventorySeasonWeaponItem =
+    document.getElementById("inventory-season-weapon-item");
+
+const inventorySeasonWeaponButton =
+    document.getElementById("inventory-season-weapon-button");
+
+const seasonButton =
+    document.getElementById("season-button");
+
+const season =
+    document.getElementById("season");
+
+const closeSeason =
+    document.getElementById("close-season");
+
+const seasonSkinButton =
+    document.getElementById("season-skin-button");
+
+const seasonWeaponButton =
+    document.getElementById("season-weapon-button");
+
+const seasonSkinSection =
+    document.getElementById("season-skin-section");
+
+const seasonWeaponSection =
+    document.getElementById("season-weapon-section");
+
+const seasonSkinCounter =
+    document.getElementById("season-skin-counter");
+
+const seasonWeaponCounter =
+    document.getElementById("season-weapon-counter");
+
+const seasonSkinStatus =
+    document.getElementById("season-skin-status");
+
+const seasonWeaponStatus =
+    document.getElementById("season-weapon-status");
+
+const seasonRewardPopup =
+    document.getElementById("season-reward-popup");
+
+const closeSeasonReward =
+    document.getElementById("close-season-reward");
+
+const seasonRewardText =
+    document.getElementById("season-reward-text");
+
+const skinsButton =
+    document.getElementById("skins-button");
+
+const weaponsButton =
+    document.getElementById("weapons-button");
+
+const skinsSection =
+    document.getElementById("skins-section");
+
+const weaponsSection =
+    document.getElementById("weapons-section");
+
+const beginnerSkinButton =
+    document.getElementById("beginner-skin-button");
+
+const bearSkinButton =
+    document.getElementById("bear-skin-button");
+
+const bearSkinPrice =
+    document.getElementById("bear-skin-price");
+
+const summerSkinButton =
+    document.getElementById("summer-skin-button");
+
+const summerSkinPrice =
+    document.getElementById("summer-skin-price");
+
+const shySkinButton =
+    document.getElementById("shy-skin-button");
+
+const shySkinPrice =
+    document.getElementById("shy-skin-price");
+
+const fistWeaponButton =
+    document.getElementById("fist-weapon-button");
+
+const swordButton =
+    document.getElementById("sword-button");
+
+const swordPrice =
+    document.getElementById("sword-price");
+
+const pistolButton =
+    document.getElementById("pistol-button");
+
+const pistolPrice =
+    document.getElementById("pistol-price");
+
+const axeButton =
+    document.getElementById("axe-button");
+
+const axePrice =
+    document.getElementById("axe-price");
+
+const bowButton =
+    document.getElementById("bow-button");
+
+const bowPrice =
+    document.getElementById("bow-price");
+
+const notEnoughPearls =
+    document.getElementById("not-enough-pearls");
+
+const closeNotEnough =
+    document.getElementById("close-not-enough");
+
+const loading =
+    document.getElementById("loading");
+
+const game =
+    document.getElementById("game");
+
+const player =
+    document.getElementById("player");
+
+const playerSkin =
+    document.getElementById("player-skin");
+
+const playerWeapon =
+    document.getElementById("player-weapon");
+
+const movementControls =
+    document.getElementById("movement-controls");
+
+const joystickBase =
+    document.getElementById("joystick-base");
+
+const joystickKnob =
+    document.getElementById("joystick-knob");
+
+const attackButton =
+    document.getElementById("attack-button");
+
+const pauseButton =
+    document.getElementById("pause-button");
+
+const pausePanel =
+    document.getElementById("pause-panel");
+
+const resumeButton =
+    document.getElementById("resume-button");
+
+const pauseMenuButton =
+    document.getElementById("pause-menu-button");
+
+const victoryScreen =
+    document.getElementById("victory-screen");
+
+const backMenuButton =
+    document.getElementById("back-menu-button");
+
+const defeatScreen =
+    document.getElementById("defeat-screen");
+
+const backMenuDefeat =
+    document.getElementById("back-menu-defeat");
+
+/* ================= IDIOMA ================= */
+
+/*
+   El idioma se guarda en una clave SEPARADA del progreso principal.
+   Esto no modifica SAVE_KEY ni la estructura de ARENAS_SAVE_V1.
+*/
+const LANGUAGE_KEY = "ARENAS_LANGUAGE_V1";
+let currentLanguage = "es";
+
+const translations = {
+    "Debes escribir tu nombre de guerrero para continuar": "You must enter your warrior name to continue",
+    "Escribe tu nombre de guerrero": "Enter your warrior name",
+    "Continuar": "Continue",
+    "Perfil": "Profile",
+    "Perlas:": "Pearls:",
+    "Campaña": "Campaign",
+    "Mercado": "Market",
+    "Rangos": "Ranks",
+    "Inventario": "Inventory",
+    "Temporada": "Season",
+    "Configuración": "Settings",
+    "Idioma": "Language",
+    "Español": "Spanish",
+    "Nombre:": "Name:",
+    "Medallones:": "Medallions:",
+    "Rango:": "Rank:",
+    "Titulos:": "Titles:",
+    "FELICIDADES!": "CONGRATULATIONS!",
+    "SUBISTE DE RANGO": "YOU RANKED UP",
+    "Nuevo rango:": "New rank:",
+    "Consigue Medallones para subir de rango": "Earn Medallions to rank up",
+    "5 Medallones": "5 Medallions", "10 Medallones": "10 Medallions", "15 Medallones": "15 Medallions",
+    "150 Perlas": "150 Pearls", "200 Perlas": "200 Pearls", "300 Perlas": "300 Pearls",
+    "130 Perlas": "130 Pearls", "160 Perlas": "160 Pearls", "215 Perlas": "215 Pearls",
+    "20 Medallones": "20 Medallions", "25 Medallones": "25 Medallions", "40 Medallones": "40 Medallions",
+    "50 Medallones": "50 Medallions", "60 Medallones": "60 Medallions", "70 Medallones": "70 Medallions",
+    "80 Medallones": "80 Medallions", "90 Medallones": "90 Medallions", "100 Medallones": "100 Medallions",
+    "110 Medallones": "110 Medallions", "120 Medallones": "120 Medallions", "130 Medallones": "130 Medallions",
+    "150 Medallones": "150 Medallions", "200 Medallones": "200 Medallions", "250 Medallones": "250 Medallions",
+    "300 Medallones": "300 Medallions", "350 Medallones": "350 Medallions", "500 Medallones": "500 Medallions",
+    "700 Medallones": "700 Medallions",
+    "Dios": "God",
+    "Dios — Rango Máximo": "God — Max Rank",
+    "Principiante": "Beginner", "Principiante II": "Beginner II", "Principiante III": "Beginner III",
+    "Guerrero": "Warrior", "Guerrero II": "Warrior II", "Guerrero III": "Warrior III",
+    "Profesional": "Professional", "Profesional II": "Professional II", "Profesional III": "Professional III",
+    "Profesional IV": "Professional IV", "Profesional V": "Professional V",
+    "Heroe": "Hero", "Heroe II": "Hero II", "Heroe III": "Hero III", "Heroe IV": "Hero IV", "Heroe V": "Hero V",
+    "Semidios": "Demigod",
+    "Pieles": "Skins", "Armas": "Weapons",
+    "Cazador de Osos": "Bear Hunter", "Verano": "Summer", "Chico Timido": "Shy Boy",
+    "Puño": "Fist", "Espada": "Sword", "Pistola": "Pistol", "Hacha": "Axe", "Arco": "Bow",
+    "Bromista": "Joker", "Globo": "Balloon",
+    "Comprar": "Buy", "Obtenido": "Obtained", "Equipar": "Equip", "Equipado": "Equipped",
+    "Piel": "Skin", "Arma": "Weapon",
+    "TEMPORADA 1": "SEASON 1",
+    "PIEL DEL BROMISTA": "JOKER SKIN",
+    "ARMA DEL GLOBO": "BALLOON WEAPON",
+    "No tienes suficientes Perlas": "You don't have enough Pearls",
+    "Cargando...": "Loading...",
+    "Reanudar": "Resume", "Ir al menu": "Go to menu",
+    "Ganaste!": "You won!", "+1 Medallones": "+1 Medallion", "+50 Perlas": "+50 Pearls",
+    "Volver al menu": "Back to menu", "Perdiste": "You lost", "-1 Medallones": "-1 Medallion",
+    "+15 Perlas": "+15 Pearls",
+    "ARMA CONSEGUIDA: GLOBO": "WEAPON OBTAINED: BALLOON",
+    "VIDA": "HEALTH",
+    "PIEL CONSEGUIDA: BROMISTA": "SKIN OBTAINED: JOKER"
+};
+
+const originalTextByNode = new WeakMap();
+
+function tr(text) {
+    if (currentLanguage === "es") return text;
+    return translations[text] || text;
+}
+
+function trRank(rank) {
+    return tr(rank);
+}
+
+function applyStaticLanguage() {
+    document.documentElement.lang = currentLanguage === "en" ? "en" : "es";
+    profilePanel.dataset.panelTitle = tr("Perfil").toUpperCase();
+
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    let node;
+
+    while ((node = walker.nextNode())) {
+        if (node.parentElement && !["SCRIPT", "STYLE"].includes(node.parentElement.tagName)) {
+            nodes.push(node);
+        }
+    }
+
+    nodes.forEach(textNode => {
+        let original = originalTextByNode.get(textNode);
+        const current = textNode.textContent.trim();
+
+        if (!original && (translations[current] || Object.values(translations).includes(current))) {
+            original = Object.prototype.hasOwnProperty.call(translations, current) ? current : Object.keys(translations).find(key => translations[key] === current);
+            if (original) originalTextByNode.set(textNode, original);
+        }
+
+        if (!original) return;
+
+        const translated = tr(original);
+        const raw = textNode.textContent;
+        const leading = raw.match(/^\s*/)?.[0] || "";
+        const trailing = raw.match(/\s*$/)?.[0] || "";
+        textNode.textContent = leading + translated + trailing;
+    });
+
+    languageOptionButtons.forEach(button => {
+        button.classList.toggle("selected", button.dataset.language === currentLanguage);
+    });
+}
+
+function loadLanguage() {
+    try {
+        const savedLanguage = localStorage.getItem(LANGUAGE_KEY);
+        if (savedLanguage === "en" || savedLanguage === "es") currentLanguage = savedLanguage;
+    } catch (error) {
+        console.warn("No se pudo cargar el idioma de ARENA'S.", error);
+    }
+}
+
+function setLanguage(language) {
+    if (language !== "es" && language !== "en") return;
+    currentLanguage = language;
+
+    try {
+        localStorage.setItem(LANGUAGE_KEY, currentLanguage);
+    } catch (error) {
+        console.warn("No se pudo guardar el idioma de ARENA'S.", error);
+    }
+
+    applyStaticLanguage();
+    updateLanguageDependentTexts();
+}
+
+function updateLanguageDependentTexts() {
+    pearls.textContent = tr("Perlas:") + " " + pearlsAmount;
+    profileName.textContent = tr("Nombre:") + " " + playerName;
+    profileRank.textContent = trRank(currentRank);
+    rankUpRankName.textContent = trRank(currentRank);
+    updateSkinButtons();
+    updateWeaponButtons();
+    updateInventoryButtons();
+    updateSeasonDisplay();
+}
+
+/* ================= CALCULAR RANGO ================= */
+
+function getRankFromMedallions(amount) {
+
+    for (
+        let i = 0;
+        i < rankThresholds.length;
+        i++
+    ) {
+
+        if (
+            amount >=
+            rankThresholds[i].medals
+        ) {
+
+            return rankThresholds[i].name;
+
+        }
+
+    }
+
+    return "Principiante";
+
+}
+
+/* ================= ACTUALIZAR RANGO ================= */
+
+function updateRank() {
+
+    currentRank =
+        getRankFromMedallions(
+            medallionsAmount
+        );
+
+    profileRank.textContent =
+        trRank(currentRank);
+
+}
+
+/* ================= ACTUALIZAR TITULOS ================= */
+
+function updateTitles() {
+
+    if (titleMedals <= 0) {
+
+        noTitles.style.display =
+            "inline";
+
+        return;
+
+    }
+
+    noTitles.style.display =
+        "none";
+
+    profileTitleMedals.innerHTML = "";
+
+    for (
+        let i = 0;
+        i < titleMedals;
+        i++
+    ) {
+
+        const medal =
+            document.createElement("span");
+
+        medal.textContent =
+            "🎖️";
+
+        profileTitleMedals.appendChild(
+            medal
+        );
+
+    }
+
+}
+
+/* ================= TEMPORADA ================= */
+
+const SEASON_NUMBER = 1;
+const SEASON_SKIN_GOAL = 15;
+const SEASON_WEAPON_GOAL = 10;
+const SEASON_SAVE_KEY = "ARENAS_SEASON_V1";
+
+const seasonSkin = {
+    name: "Bromista",
+    emoji: "🤡"
+};
+
+const seasonWeapon = {
+    name: "Globo",
+    emoji: "🎈"
+};
+
+let seasonWins = 0;
+let seasonSkinOwned = false;
+let seasonWeaponOwned = false;
+let seasonEquippedSkin = null;
+let seasonEquippedWeapon = null;
+
+function saveSeasonProgress() {
+    const seasonData = {
+        seasonNumber: SEASON_NUMBER,
+        seasonWins: seasonWins,
+        seasonSkinOwned: seasonSkinOwned,
+        seasonWeaponOwned: seasonWeaponOwned,
+        seasonEquippedSkin: seasonEquippedSkin,
+        seasonEquippedWeapon: seasonEquippedWeapon
+    };
+
+    try {
+        localStorage.setItem(
+            SEASON_SAVE_KEY,
+            JSON.stringify(seasonData)
+        );
+    } catch (error) {
+        console.warn(
+            "No se pudo guardar el progreso de la temporada.",
+            error
+        );
+    }
+}
+
+function loadSeasonProgress() {
+    try {
+        const saved = localStorage.getItem(SEASON_SAVE_KEY);
+        if (!saved) return;
+
+        const seasonData = JSON.parse(saved);
+
+        if (seasonData.seasonNumber !== SEASON_NUMBER) {
+            return;
+        }
+
+        if (Number.isFinite(seasonData.seasonWins)) {
+            seasonWins = Math.max(0, Math.floor(seasonData.seasonWins));
+        }
+
+        seasonSkinOwned = seasonData.seasonSkinOwned === true || seasonWins >= SEASON_SKIN_GOAL;
+        seasonWeaponOwned = seasonData.seasonWeaponOwned === true || seasonWins >= SEASON_WEAPON_GOAL;
+
+        if (seasonData.seasonEquippedSkin === "seasonJoker" && seasonSkinOwned) {
+            seasonEquippedSkin = "seasonJoker";
+        }
+
+        if (seasonData.seasonEquippedWeapon === "seasonBalloon" && seasonWeaponOwned) {
+            seasonEquippedWeapon = "seasonBalloon";
+        }
+    } catch (error) {
+        console.warn(
+            "No se pudo cargar el progreso de la temporada.",
+            error
+        );
+    }
+}
+
+function updateSeasonDisplay() {
+    seasonSkinCounter.textContent =
+        Math.min(seasonWins, SEASON_SKIN_GOAL) + "/" + SEASON_SKIN_GOAL;
+
+    seasonWeaponCounter.textContent =
+        Math.min(seasonWins, SEASON_WEAPON_GOAL) + "/" + SEASON_WEAPON_GOAL;
+
+    seasonSkinStatus.style.display =
+        seasonSkinOwned ? "block" : "none";
+
+    seasonWeaponStatus.style.display =
+        seasonWeaponOwned ? "block" : "none";
+}
+
+/* ================= GUARDADO AUTOMATICO ================= */
+
+const SAVE_KEY = "ARENAS_SAVE_V1";
+
+function saveGame() {
+
+    const saveData = {
+        playerName: playerName,
+        pearlsAmount: pearlsAmount,
+        medallionsAmount: medallionsAmount,
+        currentRank: currentRank,
+        titleMedals: titleMedals,
+        equippedSkin: equippedSkin,
+        equippedWeapon: equippedWeapon,
+        skinsOwned: {},
+        weaponsOwned: {}
+    };
+
+    Object.keys(skins).forEach(id => {
+
+        saveData.skinsOwned[id] =
+            skins[id].owned;
+
+    });
+
+    Object.keys(weapons).forEach(id => {
+
+        saveData.weaponsOwned[id] =
+            weapons[id].owned;
+
+    });
+
+    try {
+
+        const serializedSave =
+            JSON.stringify(saveData);
+
+        localStorage.setItem(
+            SAVE_KEY,
+            serializedSave
+        );
+
+        /*
+           Verificamos inmediatamente que el guardado
+           haya quedado realmente escrito.
+           No cambia la clave ni la estructura del guardado.
+        */
+        const savedCheck =
+            localStorage.getItem(SAVE_KEY);
+
+        if (savedCheck !== serializedSave) {
+            console.warn(
+                "El guardado de ARENA'S no pudo ser verificado."
+            );
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "No se pudo guardar el progreso de ARENA'S.",
+            error
+        );
+
+    }
+
+}
+
+function loadGame() {
+
+    try {
+
+        const saved =
+            localStorage.getItem(
+                SAVE_KEY
+            );
+
+        if (!saved)
+            return;
+
+        const saveData =
+            JSON.parse(saved);
+
+        if (
+            typeof saveData.playerName ===
+            "string"
+        ) {
+
+            playerName =
+                saveData.playerName;
+
+        }
+
+        if (
+            Number.isFinite(
+                saveData.pearlsAmount
+            )
+        ) {
+
+            pearlsAmount =
+                Math.max(
+                    0,
+                    Math.floor(
+                        saveData.pearlsAmount
+                    )
+                );
+
+        }
+
+        if (
+            Number.isFinite(
+                saveData.medallionsAmount
+            )
+        ) {
+
+            medallionsAmount =
+                Math.max(
+                    0,
+                    Math.floor(
+                        saveData.medallionsAmount
+                    )
+                );
+
+        }
+
+        if (
+            Number.isFinite(
+                saveData.titleMedals
+            )
+        ) {
+
+            titleMedals =
+                Math.max(
+                    0,
+                    Math.floor(
+                        saveData.titleMedals
+                    )
+                );
+
+        }
+
+        if (
+            saveData.equippedSkin &&
+            skins[saveData.equippedSkin] &&
+            skins[saveData.equippedSkin].owned !==
+            undefined
+        ) {
+
+            equippedSkin =
+                saveData.equippedSkin;
+
+        }
+
+        if (
+            saveData.equippedWeapon &&
+            weapons[saveData.equippedWeapon] &&
+            weapons[saveData.equippedWeapon].owned !==
+            undefined
+        ) {
+
+            equippedWeapon =
+                saveData.equippedWeapon;
+
+        }
+
+        if (
+            saveData.skinsOwned &&
+            typeof saveData.skinsOwned ===
+            "object"
+        ) {
+
+            Object.keys(skins).forEach(id => {
+
+                if (
+                    typeof saveData.skinsOwned[id] ===
+                    "boolean"
+                ) {
+
+                    skins[id].owned =
+                        saveData.skinsOwned[id];
+
+                }
+
+            });
+
+        }
+
+        if (
+            saveData.weaponsOwned &&
+            typeof saveData.weaponsOwned ===
+            "object"
+        ) {
+
+            Object.keys(weapons).forEach(id => {
+
+                if (
+                    typeof saveData.weaponsOwned[id] ===
+                    "boolean"
+                ) {
+
+                    weapons[id].owned =
+                        saveData.weaponsOwned[id];
+
+                }
+
+            });
+
+        }
+
+        /*
+           Puño y Principiante siempre
+           pertenecen al jugador.
+        */
+        skins.beginner.owned =
+            true;
+
+        weapons.fist.owned =
+            true;
+
+        /*
+           Por seguridad, si un guardado
+           antiguo tuviera equipado algo
+           que ya no figura como comprado,
+           volvemos al objeto inicial.
+        */
+        if (
+            !skins[equippedSkin].owned
+        ) {
+
+            equippedSkin =
+                "beginner";
+
+        }
+
+        if (
+            !weapons[equippedWeapon].owned
+        ) {
+
+            equippedWeapon =
+                "fist";
+
+        }
+
+        currentRank =
+            getRankFromMedallions(
+                medallionsAmount
+            );
+
+        profileName.textContent =
+            "Nombre: " + playerName;
+
+        /*
+           Si existe una partida guardada,
+           después del splash vamos
+           directamente al menú.
+        */
+        if (playerName !== "") {
+
+            nameScreen.style.display =
+                "none";
+
+            menu.style.display =
+                "block";
+
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "No se pudo cargar el progreso de ARENA'S.",
+            error
+        );
+
+    }
+
+}
+
+loadGame();
+loadSeasonProgress();
+loadLanguage();
+applyStaticLanguage();
+updateSeasonDisplay();
+updateCharacterVisuals();
+
+/*
+   Al cargar, actualizamos inmediatamente los datos visibles.
+   Esto NO guarda ni modifica el progreso; solamente refleja
+   en pantalla lo que acabamos de recuperar.
+*/
+pearls.textContent =
+    tr("Perlas:") + " " + pearlsAmount;
+
+profileMedallions.textContent =
+    medallionsAmount;
+
+/*
+   Guardado de seguridad al salir de la página/app.
+   Usa exactamente el mismo saveGame() y la misma estructura.
+*/
+window.addEventListener("pagehide", saveGame);
+window.addEventListener("beforeunload", saveGame);
+
+document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") {
+        saveGame();
+    }
+});
+
+/* ================= SPLASH ================= */
+
+setTimeout(() => {
+
+    splash.style.display = "none";
+
+}, 2000);
+
+/* ================= NOMBRE ================= */
+
+continueButton.addEventListener("click", () => {
+
+    const value =
+        nameInput.value.trim();
+
+    if (value === "") {
+
+        nameWarning.style.display =
+            "block";
+
+        setTimeout(() => {
+
+            nameWarning.style.display =
+                "none";
+
+        }, 2000);
+
+        return;
+
+    }
+
+    playerName = value;
+
+    profileName.textContent =
+        tr("Nombre:") + " " + playerName;
+
+    saveGame();
+
+    nameScreen.style.display =
+        "none";
+
+    menu.style.display =
+        "block";
+
+});
+
+/* ================= CONFIGURACION ================= */
+
+settingsButton.addEventListener("click", () => {
+    menu.style.display = "block";
+    settingsPanel.style.display = "block";
+    languageOptions.style.display = "none";
+    applyStaticLanguage();
+});
+
+closeSettings.addEventListener("click", () => {
+    settingsPanel.style.display = "none";
+    languageOptions.style.display = "none";
+    menu.style.display = "block";
+});
+
+languageButton.addEventListener("click", () => {
+    languageOptions.style.display =
+        languageOptions.style.display === "block" ? "none" : "block";
+});
+
+languageOptionButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        setLanguage(button.dataset.language);
+        languageOptions.style.display = "none";
+    });
+});
+
+/* ================= PERFIL ================= */
+
+profileButton.addEventListener("click", () => {
+
+    updateRank();
+    updateTitles();
+
+    profilePanel.style.display =
+        "block";
+
+});
+
+closeProfile.onclick = function () {
+
+    profilePanel.style.display =
+        "none";
+
+};
+
+/* ================= CARTEL SUBIDA DE RANGO ================= */
+
+function showRankUpMessage() {
+
+    if (!pendingRankUp)
+        return;
+
+    rankUpRankName.textContent =
+        trRank(currentRank);
+
+    rankUpScreen.style.display =
+        "flex";
+
+    pendingRankUp =
+        false;
+
+}
+
+closeRankUp.onclick = function () {
+
+    rankUpScreen.style.display =
+        "none";
+
+    if (pendingSeasonReward) {
+        const reward = pendingSeasonReward;
+        pendingSeasonReward = null;
+        showSeasonRewardMessage(reward);
+    }
+
+};
+
+/* ================= RANGOS ================= */
+
+ranksButton.addEventListener("click", () => {
+
+    menu.style.display =
+        "none";
+
+    ranksScreen.style.display =
+        "block";
+
+});
+
+closeRanks.onclick = function () {
+
+    ranksScreen.style.display =
+        "none";
+
+    menu.style.display =
+        "block";
+
+};
+
+/* ================= PERLAS ================= */
+
+function updatePearls() {
+
+    pearls.textContent =
+        tr("Perlas:") + " " + pearlsAmount;
+
+    saveGame();
+
+}
+
+/* ================= MEDALLONES ================= */
+
+function updateMedallions() {
+
+    profileMedallions.textContent =
+        medallionsAmount;
+
+    updateRank();
+    updateTitles();
+
+    saveGame();
+
+}
+
+/* ================= VISUAL PERSONAJE ================= */
+
+function updateCharacterVisuals() {
+
+    const skin =
+        seasonEquippedSkin === "seasonJoker"
+            ? seasonSkin
+            : skins[equippedSkin];
+
+    const weapon =
+        seasonEquippedWeapon === "seasonBalloon"
+            ? seasonWeapon
+            : weapons[equippedWeapon];
+
+    currentSkin.textContent =
+        skin.emoji;
+
+    playerSkin.textContent =
+        skin.emoji;
+
+    if (equippedWeapon === "fist" && !seasonEquippedWeapon) {
+
+        currentWeapon.style.display =
+            "none";
+
+        playerWeapon.style.display =
+            "none";
+
+    } else {
+
+        currentWeapon.textContent =
+            weapon.emoji;
+
+        playerWeapon.textContent =
+            weapon.emoji;
+
+        currentWeapon.style.display =
+            "block";
+
+        playerWeapon.style.display =
+            "block";
+
+    }
+
+}
+
+/* ================= BOTONES PIELES ================= */
+
+function updateSkinButtons() {
+
+    beginnerSkinButton.textContent = tr("Obtenido");
+    beginnerSkinButton.classList.add("obtained");
+    beginnerSkinButton.classList.remove("equipped");
+
+    bearSkinButton.textContent = skins.bearHunter.owned ? tr("Obtenido") : tr("Comprar");
+    bearSkinButton.classList.toggle("obtained", skins.bearHunter.owned);
+    bearSkinButton.classList.remove("equipped");
+    bearSkinPrice.style.display = skins.bearHunter.owned ? "none" : "block";
+
+    summerSkinButton.textContent = skins.summer.owned ? tr("Obtenido") : tr("Comprar");
+    summerSkinButton.classList.toggle("obtained", skins.summer.owned);
+    summerSkinButton.classList.remove("equipped");
+    summerSkinPrice.style.display = skins.summer.owned ? "none" : "block";
+
+    shySkinButton.textContent = skins.shyBoy.owned ? tr("Obtenido") : tr("Comprar");
+    shySkinButton.classList.toggle("obtained", skins.shyBoy.owned);
+    shySkinButton.classList.remove("equipped");
+    shySkinPrice.style.display = skins.shyBoy.owned ? "none" : "block";
+
+    saveGame();
+}
+
+/* ================= BOTONES ARMAS ================= */
+
+function updateWeaponButtons() {
+
+    fistWeaponButton.textContent = tr("Obtenido");
+    fistWeaponButton.classList.add("obtained");
+    fistWeaponButton.classList.remove("equipped");
+
+    swordButton.textContent = weapons.sword.owned ? tr("Obtenido") : tr("Comprar");
+    swordButton.classList.toggle("obtained", weapons.sword.owned);
+    swordButton.classList.remove("equipped");
+    swordPrice.style.display = weapons.sword.owned ? "none" : "block";
+
+    pistolButton.textContent = weapons.pistol.owned ? tr("Obtenido") : tr("Comprar");
+    pistolButton.classList.toggle("obtained", weapons.pistol.owned);
+    pistolButton.classList.remove("equipped");
+    pistolPrice.style.display = weapons.pistol.owned ? "none" : "block";
+
+    axeButton.textContent = weapons.axe.owned ? tr("Obtenido") : tr("Comprar");
+    axeButton.classList.toggle("obtained", weapons.axe.owned);
+    axeButton.classList.remove("equipped");
+    axePrice.style.display = weapons.axe.owned ? "none" : "block";
+
+    bowButton.textContent = weapons.bow.owned ? tr("Obtenido") : tr("Comprar");
+    bowButton.classList.toggle("obtained", weapons.bow.owned);
+    bowButton.classList.remove("equipped");
+    bowPrice.style.display = weapons.bow.owned ? "none" : "block";
+
+    saveGame();
+}
+
+/* ================= POPUP ================= */
+
+function showNotEnoughPearls() {
+
+    notEnoughPearls.style.display =
+        "flex";
+
+}
+
+closeNotEnough.addEventListener("click", () => {
+
+    notEnoughPearls.style.display =
+        "none";
+
+});
+
+/* ================= MERCADO ================= */
+
+marketButton.addEventListener("click", () => {
+
+    market.style.display =
+        "block";
+
+    skinsSection.style.display =
+        "block";
+
+    weaponsSection.style.display =
+        "none";
+
+    updateSkinButtons();
+    updateWeaponButtons();
+
+});
+
+closeMarket.addEventListener("click", () => {
+
+    market.style.display =
+        "none";
+
+});
+
+/* ================= INVENTARIO ================= */
+
+function updateInventoryButtons() {
+    const skinButtons = [
+        [inventoryBeginnerSkinButton, "beginner"],
+        [inventoryBearSkinButton, "bearHunter"],
+        [inventorySummerSkinButton, "summer"],
+        [inventoryShySkinButton, "shyBoy"]
+    ];
+
+    skinButtons.forEach(([button, id]) => {
+        const owned = skins[id].owned;
+        button.style.display = owned ? "block" : "none";
+        if (!owned) return;
+        button.classList.remove("obtained");
+        const equipped = equippedSkin === id && !seasonEquippedSkin;
+        button.textContent = equipped ? tr("Equipado") : tr("Equipar");
+        button.classList.toggle("equipped", equipped);
+    });
+
+    const weaponButtons = [
+        [inventoryFistWeaponButton, "fist"],
+        [inventorySwordButton, "sword"],
+        [inventoryPistolButton, "pistol"],
+        [inventoryAxeButton, "axe"],
+        [inventoryBowButton, "bow"]
+    ];
+
+    weaponButtons.forEach(([button, id]) => {
+        const owned = weapons[id].owned;
+        button.style.display = owned ? "block" : "none";
+        if (!owned) return;
+        button.classList.remove("obtained");
+        const equipped = equippedWeapon === id && !seasonEquippedWeapon;
+        button.textContent = equipped ? tr("Equipado") : tr("Equipar");
+        button.classList.toggle("equipped", equipped);
+    });
+
+    inventorySeasonSkinItem.style.display = seasonSkinOwned ? "flex" : "none";
+    if (seasonSkinOwned) {
+        const equipped = seasonEquippedSkin === "seasonJoker";
+        inventorySeasonSkinButton.textContent = equipped ? tr("Equipado") : tr("Equipar");
+        inventorySeasonSkinButton.classList.toggle("equipped", equipped);
+        inventorySeasonSkinButton.classList.remove("obtained");
+    }
+
+    inventorySeasonWeaponItem.style.display = seasonWeaponOwned ? "flex" : "none";
+    if (seasonWeaponOwned) {
+        const equipped = seasonEquippedWeapon === "seasonBalloon";
+        inventorySeasonWeaponButton.textContent = equipped ? tr("Equipado") : tr("Equipar");
+        inventorySeasonWeaponButton.classList.toggle("equipped", equipped);
+        inventorySeasonWeaponButton.classList.remove("obtained");
+    }
+
+    saveGame();
+    saveSeasonProgress();
+}
+
+inventoryButton.addEventListener("click", () => {
+    menu.style.display = "none";
+    inventory.style.display = "block";
+    inventorySkinsSection.style.display = "block";
+    inventoryWeaponsSection.style.display = "none";
+    updateInventoryButtons();
+    updateSeasonDisplay();
+});
+
+closeInventory.addEventListener("click", () => {
+    inventory.style.display = "none";
+    menu.style.display = "block";
+});
+
+inventorySkinsButton.addEventListener("click", () => {
+    inventorySkinsSection.style.display = "block";
+    inventoryWeaponsSection.style.display = "none";
+});
+
+inventoryWeaponsButton.addEventListener("click", () => {
+    inventorySkinsSection.style.display = "none";
+    inventoryWeaponsSection.style.display = "block";
+});
+
+inventoryBeginnerSkinButton.addEventListener("click", () => {
+    if (!skins.beginner.owned) return;
+    equippedSkin = "beginner";
+    seasonEquippedSkin = null;
+    updateInventoryButtons();
+    updateCharacterVisuals();
+});
+
+inventoryBearSkinButton.addEventListener("click", () => {
+    if (!skins.bearHunter.owned) return;
+    equippedSkin = "bearHunter";
+    seasonEquippedSkin = null;
+    updateInventoryButtons();
+    updateCharacterVisuals();
+});
+
+inventorySummerSkinButton.addEventListener("click", () => {
+    if (!skins.summer.owned) return;
+    equippedSkin = "summer";
+    seasonEquippedSkin = null;
+    updateInventoryButtons();
+    updateCharacterVisuals();
+});
+
+inventoryShySkinButton.addEventListener("click", () => {
+    if (!skins.shyBoy.owned) return;
+    equippedSkin = "shyBoy";
+    seasonEquippedSkin = null;
+    updateInventoryButtons();
+    updateCharacterVisuals();
+});
+
+inventoryFistWeaponButton.addEventListener("click", () => {
+    if (!weapons.fist.owned) return;
+    equippedWeapon = "fist";
+    seasonEquippedWeapon = null;
+    updateInventoryButtons();
+    updateCharacterVisuals();
+});
+
+inventorySwordButton.addEventListener("click", () => {
+    if (!weapons.sword.owned) return;
+    equippedWeapon = "sword";
+    seasonEquippedWeapon = null;
+    updateInventoryButtons();
+    updateCharacterVisuals();
+});
+
+inventoryPistolButton.addEventListener("click", () => {
+    if (!weapons.pistol.owned) return;
+    equippedWeapon = "pistol";
+    seasonEquippedWeapon = null;
+    updateInventoryButtons();
+    updateCharacterVisuals();
+});
+
+inventoryAxeButton.addEventListener("click", () => {
+    if (!weapons.axe.owned) return;
+    equippedWeapon = "axe";
+    seasonEquippedWeapon = null;
+    updateInventoryButtons();
+    updateCharacterVisuals();
+});
+
+inventoryBowButton.addEventListener("click", () => {
+    if (!weapons.bow.owned) return;
+    equippedWeapon = "bow";
+    seasonEquippedWeapon = null;
+    updateInventoryButtons();
+    updateCharacterVisuals();
+});
+
+inventorySeasonSkinButton.addEventListener("click", () => {
+    if (!seasonSkinOwned) return;
+    seasonEquippedSkin = "seasonJoker";
+    updateInventoryButtons();
+    updateCharacterVisuals();
+    saveSeasonProgress();
+});
+
+inventorySeasonWeaponButton.addEventListener("click", () => {
+    if (!seasonWeaponOwned) return;
+    seasonEquippedWeapon = "seasonBalloon";
+    updateInventoryButtons();
+    updateCharacterVisuals();
+    saveSeasonProgress();
+});
+
+skinsButton.addEventListener("click", () => {
+
+    skinsSection.style.display =
+        "block";
+
+    weaponsSection.style.display =
+        "none";
+
+});
+
+weaponsButton.addEventListener("click", () => {
+
+    skinsSection.style.display =
+        "none";
+
+    weaponsSection.style.display =
+        "block";
+
+});
+
+/* ================= PIELES ================= */
+
+beginnerSkinButton.addEventListener("click", () => {
+    return;
+});
+
+bearSkinButton.addEventListener("click", () => {
+
+    if (!skins.bearHunter.owned) {
+
+        if (pearlsAmount < 150) {
+
+            showNotEnoughPearls();
+            return;
+
+        }
+
+        pearlsAmount -= 150;
+
+        updatePearls();
+
+        skins.bearHunter.owned =
+            true;
+
+    }
+
+    updateSkinButtons();
+    updateInventoryButtons();
+
+});
+
+summerSkinButton.addEventListener("click", () => {
+
+    if (!skins.summer.owned) {
+
+        if (pearlsAmount < 200) {
+
+            showNotEnoughPearls();
+            return;
+
+        }
+
+        pearlsAmount -= 200;
+
+        updatePearls();
+
+        skins.summer.owned =
+            true;
+
+    }
+
+    updateSkinButtons();
+    updateInventoryButtons();
+
+});
+
+shySkinButton.addEventListener("click", () => {
+
+    if (!skins.shyBoy.owned) {
+
+        if (pearlsAmount < 300) {
+
+            showNotEnoughPearls();
+            return;
+
+        }
+
+        pearlsAmount -= 300;
+
+        updatePearls();
+
+        skins.shyBoy.owned =
+            true;
+
+    }
+
+    updateSkinButtons();
+    updateInventoryButtons();
+
+});
+
+/* ================= ARMAS ================= */
+
+fistWeaponButton.addEventListener("click", () => {
+    return;
+});
+
+swordButton.addEventListener("click", () => {
+
+    if (!weapons.sword.owned) {
+
+        if (pearlsAmount < 130) {
+
+            showNotEnoughPearls();
+            return;
+
+        }
+
+        pearlsAmount -= 130;
+
+        updatePearls();
+
+        weapons.sword.owned =
+            true;
+
+    }
+
+    updateWeaponButtons();
+    updateInventoryButtons();
+
+});
+
+pistolButton.addEventListener("click", () => {
+
+    if (!weapons.pistol.owned) {
+
+        if (pearlsAmount < 160) {
+
+            showNotEnoughPearls();
+            return;
+
+        }
+
+        pearlsAmount -= 160;
+
+        updatePearls();
+
+        weapons.pistol.owned =
+            true;
+
+    }
+
+    updateWeaponButtons();
+    updateInventoryButtons();
+
+});
+
+axeButton.addEventListener("click", () => {
+
+    if (!weapons.axe.owned) {
+
+        if (pearlsAmount < 215) {
+
+            showNotEnoughPearls();
+            return;
+
+        }
+
+        pearlsAmount -= 215;
+
+        updatePearls();
+
+        weapons.axe.owned =
+            true;
+
+    }
+
+    updateWeaponButtons();
+    updateInventoryButtons();
+
+});
+
+bowButton.addEventListener("click", () => {
+
+    if (!weapons.bow.owned) {
+
+        if (pearlsAmount < 300) {
+
+            showNotEnoughPearls();
+            return;
+
+        }
+
+        pearlsAmount -= 300;
+
+        updatePearls();
+
+        weapons.bow.owned =
+            true;
+
+    }
+
+    updateWeaponButtons();
+    updateInventoryButtons();
+
+});
+
+/* ================= MOVIMIENTO ================= */
+
+function updatePlayerPosition() {
+    if (gameFinished || gamePaused) {
+        requestAnimationFrame(updatePlayerPosition);
+        return;
+    }
+
+    playerPosition.x += joystickX * movementSpeed;
+    playerPosition.y += joystickY * movementSpeed;
+    playerPosition.x = Math.max(3, Math.min(97, playerPosition.x));
+    playerPosition.y = Math.max(7, Math.min(93, playerPosition.y));
+
+    player.style.left = playerPosition.x + "%";
+    player.style.top = playerPosition.y + "%";
+    requestAnimationFrame(updatePlayerPosition);
+}
+
+updatePlayerPosition();
+
+function actualizarJoystick(clientX, clientY) {
+    if (!joystickActive || gameFinished || gamePaused) return;
+    const rect = joystickBase.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const maxDistance = rect.width * 0.29;
+    let dx = clientX - centerX;
+    let dy = clientY - centerY;
+    const distance = Math.hypot(dx, dy);
+    if (distance > maxDistance) {
+        dx = dx / distance * maxDistance;
+        dy = dy / distance * maxDistance;
+    }
+    joystickX = dx / maxDistance;
+    joystickY = dy / maxDistance;
+    joystickKnob.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+}
+
+function resetJoystick() {
+    joystickActive = false;
+    joystickX = 0;
+    joystickY = 0;
+    joystickKnob.style.transform = "translate(-50%, -50%)";
+}
+
+joystickBase.addEventListener("pointerdown", event => {
+    if (gameFinished || gamePaused) return;
+    joystickActive = true;
+    joystickBase.setPointerCapture(event.pointerId);
+    actualizarJoystick(event.clientX, event.clientY);
+});
+
+joystickBase.addEventListener("pointermove", event => {
+    actualizarJoystick(event.clientX, event.clientY);
+});
+
+joystickBase.addEventListener("pointerup", resetJoystick);
+joystickBase.addEventListener("pointercancel", resetJoystick);
+joystickBase.addEventListener("lostpointercapture", resetJoystick);
+
+/* ================= VIDAS ================= */
+
+function resetLives() {
+
+    lives = 3;
+
+    document.getElementById("life1").textContent =
+        "❤️";
+
+    document.getElementById("life2").textContent =
+        "❤️";
+
+    document.getElementById("life3").textContent =
+        "❤️";
+
+}
+
+function updateLives() {
+
+    document.getElementById("life1").textContent =
+        lives >= 1 ? "❤️" : "🖤";
+
+    document.getElementById("life2").textContent =
+        lives >= 2 ? "❤️" : "🖤";
+
+    document.getElementById("life3").textContent =
+        lives >= 3 ? "❤️" : "🖤";
+
+}
+
+/* ================= ENEMIGOS ================= */
+
+function spawnEnemy() {
+    if (gameFinished || gamePaused || enemies.length >= 4) return;
+
+    const side = Math.floor(Math.random() * 4);
+    let x, y;
+    if (side === 0) { x = Math.random() * 100; y = -5; }
+    else if (side === 1) { x = 105; y = Math.random() * 100; }
+    else if (side === 2) { x = Math.random() * 100; y = 105; }
+    else { x = -5; y = Math.random() * 100; }
+
+    const enemy = document.createElement("div");
+    enemy.className = "enemy";
+    enemy.textContent = Math.random() < 0.5 ? "🧟" : "👽";
+    enemy.style.left = x + "%";
+    enemy.style.top = y + "%";
+    enemy.dataset.id = enemyId++;
+    game.appendChild(enemy);
+
+    enemies.push({
+        id: enemy.dataset.id,
+        element: enemy,
+        x,
+        y,
+        speed: 0.62 + Math.random() * 0.18,
+        damageCooldownUntil: 0,
+        damageTimer: null,
+        waitingToDamage: false
+    });
+}
+
+/* ================= DAÑO ================= */
+
+function prepararDanio(enemy) {
+    if (
+        enemy.waitingToDamage ||
+        gameFinished ||
+        gamePaused ||
+        Date.now() < enemy.damageCooldownUntil
+    ) {
+        return;
+    }
+
+    enemy.waitingToDamage = true;
+
+    enemy.damageTimer = setTimeout(() => {
+        enemy.damageTimer = null;
+        enemy.waitingToDamage = false;
+
+        if (gameFinished || gamePaused) return;
+
+        const distancePixels = Math.hypot(
+            (playerPosition.x - enemy.x) * game.clientWidth / 100,
+            (playerPosition.y - enemy.y) * game.clientHeight / 100
+        );
+
+        if (distancePixels <= 46) {
+            recibirDanio(enemy);
+        }
+    }, 500);
+}
+
+function cancelarDanio(enemy) {
+    if (!enemy.waitingToDamage) return;
+
+    clearTimeout(enemy.damageTimer);
+    enemy.damageTimer = null;
+    enemy.waitingToDamage = false;
+}
+
+function recibirDanio(enemy) {
+    if (gameFinished || gamePaused) return;
+    const now = Date.now();
+    if (now < enemy.damageCooldownUntil) return;
+
+    lives--;
+    updateLives();
+
+    // Después de golpear, este enemigo debe esperar 1 segundo antes de volver a dañar.
+    enemy.damageCooldownUntil = now + 1000;
+
+    if (lives <= 0) perderPartida();
+}
+
+/* ================= ACTUALIZAR ENEMIGOS ================= */
+
+function updateEnemies() {
+    if (!gameFinished && !gamePaused) {
+        enemies.forEach(enemy => {
+            const dx = playerPosition.x - enemy.x;
+            const dy = playerPosition.y - enemy.y;
+            const distance = Math.hypot(dx, dy);
+            if (distance > 0.1) {
+                enemy.x += dx / distance * enemy.speed * 0.10;
+                enemy.y += dy / distance * enemy.speed * 0.10;
+            }
+            enemy.element.style.left = enemy.x + "%";
+            enemy.element.style.top = enemy.y + "%";
+
+            const distancePixels = Math.hypot(
+                (playerPosition.x - enemy.x) * game.clientWidth / 100,
+                (playerPosition.y - enemy.y) * game.clientHeight / 100
+            );
+
+            if (distancePixels <= 46) {
+                prepararDanio(enemy);
+            } else {
+                cancelarDanio(enemy);
+            }
+        });
+    }
+    requestAnimationFrame(updateEnemies);
+}
+
+updateEnemies();
+
+/* ================= SPAWN ================= */
+
+function programarSpawn(min, max) {
+
+    clearTimeout(
+        spawnTimeout
+    );
+
+    if (
+        gameFinished ||
+        gamePaused
+    )
+        return;
+
+    const delay =
+        min +
+        Math.random() *
+        (max - min);
+
+    spawnTimerStart =
+        Date.now();
+
+    spawnTimerRemaining =
+        delay;
+
+    spawnTimeout =
+        setTimeout(() => {
+
+            spawnEnemy();
+
+            programarSpawn(
+                2000,
+                4000
+            );
+
+        }, delay);
+
+}
+
+/* ================= ATAQUE ================= */
+
+function ejecutarAtaque() {
+    if (gameFinished || gamePaused || enemies.length === 0) return;
+    let closestEnemy = null;
+    let closestDistance = Infinity;
+    enemies.forEach(enemy => {
+        const distance = Math.hypot(
+            (enemy.x - playerPosition.x) * game.clientWidth / 100,
+            (enemy.y - playerPosition.y) * game.clientHeight / 100
+        );
+        if (distance < closestDistance) {
+            closestDistance = distance;
+            closestEnemy = enemy;
+        }
+    });
+    if (closestEnemy && closestDistance <= 82) killEnemy(closestEnemy);
+}
+
+attackButton.addEventListener("pointerdown", event => {
+    event.preventDefault();
+    ejecutarAtaque();
+});
+
+/* ================= MATAR ================= */
+
+function killEnemy(enemy) {
+    if (!enemy) return;
+    clearTimeout(enemy.damageTimer);
+    enemy.damageTimer = null;
+    enemy.waitingToDamage = false;
+    if (enemy.element.parentNode) enemy.element.remove();
+    enemies = enemies.filter(e => e.id !== enemy.id);
+    enemiesKilled++;
+    if (enemiesKilled >= enemiesNeeded) ganarPartida();
+}
+
+/* ================= ORIENTACION MOVIL ================= */
+
+async function entrarOrientacionGameplay() {
+
+    try {
+        if (document.documentElement.requestFullscreen && !document.fullscreenElement) {
+            await document.documentElement.requestFullscreen();
+        }
+    } catch (error) {
+        console.warn("No se pudo activar pantalla completa para la orientación.", error);
+    }
+
+    try {
+        if (screen.orientation && screen.orientation.lock) {
+            await screen.orientation.lock("landscape");
+        }
+    } catch (error) {
+        console.warn("El dispositivo no permitió bloquear la orientación horizontal.", error);
+    }
+
+}
+
+async function volverOrientacionMenu() {
+
+    try {
+        if (screen.orientation && screen.orientation.unlock) {
+            screen.orientation.unlock();
+        }
+    } catch (error) {
+        console.warn("No se pudo liberar la orientación.", error);
+    }
+
+    try {
+        if (document.fullscreenElement && document.exitFullscreen) {
+            await document.exitFullscreen();
+        }
+    } catch (error) {
+        console.warn("No se pudo salir de pantalla completa.", error);
+    }
+
+}
+
+/* ================= TEMPORADA ================= */
+
+function abrirTemporada() {
+    menu.style.display = "none";
+    season.style.display = "block";
+    seasonSkinSection.style.display = "flex";
+    seasonWeaponSection.style.display = "none";
+    updateSeasonDisplay();
+}
+
+seasonButton.addEventListener("click", abrirTemporada);
+
+closeSeason.addEventListener("click", () => {
+    season.style.display = "none";
+    menu.style.display = "block";
+});
+
+seasonSkinButton.addEventListener("click", () => {
+    seasonSkinSection.style.display = "flex";
+    seasonWeaponSection.style.display = "none";
+    updateSeasonDisplay();
+});
+
+seasonWeaponButton.addEventListener("click", () => {
+    seasonSkinSection.style.display = "none";
+    seasonWeaponSection.style.display = "flex";
+    updateSeasonDisplay();
+});
+
+function showSeasonRewardMessage(message) {
+    seasonRewardText.textContent = tr(message);
+    seasonRewardPopup.style.display = "flex";
+}
+
+closeSeasonReward.addEventListener("click", () => {
+    seasonRewardPopup.style.display = "none";
+});
+
+function updateSeasonAfterWin() {
+    const previousWins = seasonWins;
+
+    seasonWins++;
+
+    if (seasonWins >= SEASON_WEAPON_GOAL) {
+        seasonWeaponOwned = true;
+    }
+
+    if (seasonWins >= SEASON_SKIN_GOAL) {
+        seasonSkinOwned = true;
+    }
+
+    saveSeasonProgress();
+    updateSeasonDisplay();
+
+    return {
+        weaponUnlockedNow:
+            previousWins < SEASON_WEAPON_GOAL &&
+            seasonWins >= SEASON_WEAPON_GOAL,
+        skinUnlockedNow:
+            previousWins < SEASON_SKIN_GOAL &&
+            seasonWins >= SEASON_SKIN_GOAL
+    };
+}
+
+/* ================= CAMPAÑA ================= */
+
+campaignButton.addEventListener(
+    "click",
+    () => {
+
+        entrarOrientacionGameplay();
+
+        menu.style.display =
+            "none";
+
+        loading.style.display =
+            "flex";
+
+        setTimeout(() => {
+
+            loading.style.display =
+                "none";
+
+            iniciarPartida();
+
+        }, 2000);
+
+    }
+);
+
+function aplicarTerrenoAleatorio() {
+    const terrains = ["terrain-dirt", "terrain-grass", "terrain-stone"];
+    const ground = document.getElementById("arena-ground");
+    ground.className = terrains[Math.floor(Math.random() * terrains.length)];
+}
+
+/* ================= INICIAR PARTIDA ================= */
+
+function iniciarPartida() {
+
+    game.style.display =
+        "block";
+
+    victoryScreen.style.display =
+        "none";
+
+    defeatScreen.style.display =
+        "none";
+
+    pausePanel.style.display =
+        "none";
+
+    rankUpScreen.style.display =
+        "none";
+
+    gameFinished =
+        false;
+
+    gamePaused =
+        false;
+
+    enemiesKilled =
+        0;
+
+    enemiesNeeded =
+        Math.floor(
+            Math.random() * 6
+        ) + 10;
+
+    playerPosition = { x: 50, y: 50 };
+
+    player.style.left = playerPosition.x + "%";
+    player.style.top = playerPosition.y + "%";
+
+    resetJoystick();
+    aplicarTerrenoAleatorio();
+
+    resetLives();
+
+    enemies.forEach(enemy => {
+
+        clearTimeout(
+            enemy.damageTimer
+        );
+
+        clearTimeout(
+            enemy.cooldownTimer
+        );
+
+        if (
+            enemy.element.parentNode
+        ) {
+
+            enemy.element.remove();
+
+        }
+
+    });
+
+    enemies = [];
+
+    updateCharacterVisuals();
+
+    programarSpawn(
+        2000,
+        3500
+    );
+
+}
+
+/* ================= GANAR ================= */
+
+function ganarPartida() {
+
+    gameFinished =
+        true;
+
+    clearTimeout(
+        spawnTimeout
+    );
+
+    spawnTimeout =
+        null;
+
+    enemies.forEach(enemy => {
+
+        clearTimeout(
+            enemy.damageTimer
+        );
+
+        clearTimeout(
+            enemy.cooldownTimer
+        );
+
+        if (
+            enemy.element.parentNode
+        ) {
+
+            enemy.element.remove();
+
+        }
+
+    });
+
+    enemies = [];
+
+    /*
+       Guardamos el rango que teníamos
+       antes de conseguir el Medallón.
+    */
+
+    previousRankBeforeWin =
+        currentRank;
+
+    medallionsAmount++;
+
+    pearlsAmount += 50;
+
+    /*
+       Calculamos el nuevo rango.
+    */
+
+    const newRank =
+        getRankFromMedallions(
+            medallionsAmount
+        );
+
+    currentRank =
+        newRank;
+
+    /*
+       Si el nuevo rango es distinto
+       y es superior al anterior,
+       queda pendiente el cartel.
+    */
+
+    const oldRankIndex =
+        rankThresholds.findIndex(
+            rank =>
+                rank.name ===
+                previousRankBeforeWin
+        );
+
+    const newRankIndex =
+        rankThresholds.findIndex(
+            rank =>
+                rank.name ===
+                newRank
+        );
+
+    let oldRankLevel;
+
+    let newRankLevel;
+
+    if (
+        previousRankBeforeWin ===
+        "Principiante"
+    ) {
+
+        oldRankLevel = -1;
+
+    } else {
+
+        oldRankLevel =
+            rankThresholds.length -
+            1 -
+            oldRankIndex;
+
+    }
+
+    if (
+        newRank ===
+        "Principiante"
+    ) {
+
+        newRankLevel = -1;
+
+    } else {
+
+        newRankLevel =
+            rankThresholds.length -
+            1 -
+            newRankIndex;
+
+    }
+
+    if (
+        newRankLevel >
+        oldRankLevel
+    ) {
+
+        pendingRankUp =
+            true;
+
+    }
+
+    /*
+       Si acabamos de llegar a Dios,
+       se obtiene un nuevo Título.
+    */
+
+    if (
+        newRank === "Dios" &&
+        previousRankBeforeWin !== "Dios"
+    ) {
+
+        titleMedals++;
+
+    }
+
+    updateMedallions();
+    updatePearls();
+    updateRank();
+    updateTitles();
+
+    const seasonRewards =
+        updateSeasonAfterWin();
+
+    if (seasonRewards.weaponUnlockedNow) {
+        pendingSeasonReward = "ARMA CONSEGUIDA: GLOBO";
+    } else if (seasonRewards.skinUnlockedNow) {
+        pendingSeasonReward = "PIEL CONSEGUIDA: BROMISTA";
+    }
+
+    game.style.display =
+        "none";
+
+    victoryScreen.style.display =
+        "flex";
+
+}
+
+/* ================= PERDER ================= */
+
+function perderPartida() {
+
+    gameFinished =
+        true;
+
+    clearTimeout(
+        spawnTimeout
+    );
+
+    spawnTimeout =
+        null;
+
+    enemies.forEach(enemy => {
+
+        clearTimeout(
+            enemy.damageTimer
+        );
+
+        clearTimeout(
+            enemy.cooldownTimer
+        );
+
+        if (
+            enemy.element.parentNode
+        ) {
+
+            enemy.element.remove();
+
+        }
+
+    });
+
+    enemies = [];
+
+    if (
+        medallionsAmount > 0
+    ) {
+
+        medallionsAmount--;
+
+    }
+
+    pearlsAmount += 15;
+
+    /*
+       Al perder, el rango se recalcula
+       inmediatamente según los Medallones.
+       Si bajamos de un límite,
+       también bajamos de rango.
+    */
+
+    updateMedallions();
+    updatePearls();
+    updateRank();
+    updateTitles();
+
+    game.style.display =
+        "none";
+
+    defeatScreen.style.display =
+        "flex";
+
+}
+
+/* ================= VICTORIA ================= */
+
+backMenuButton.addEventListener(
+    "click",
+    async () => {
+
+        await volverOrientacionMenu();
+
+        victoryScreen.style.display =
+            "none";
+
+        game.style.display =
+            "none";
+
+        menu.style.display =
+            "block";
+
+        /*
+           El cartel de subida aparece
+           SOLAMENTE al volver al menú.
+        */
+
+        if (pendingRankUp) {
+            showRankUpMessage();
+        } else if (pendingSeasonReward) {
+            const reward = pendingSeasonReward;
+            pendingSeasonReward = null;
+            showSeasonRewardMessage(reward);
+        }
+
+    }
+);
+
+/* ================= DERROTA ================= */
+
+backMenuDefeat.addEventListener(
+    "click",
+    async () => {
+
+        await volverOrientacionMenu();
+
+        defeatScreen.style.display =
+            "none";
+
+        game.style.display =
+            "none";
+
+        menu.style.display =
+            "block";
+
+    }
+);
+
+/* ================= PAUSA ================= */
+
+pauseButton.addEventListener("click", () => {
+    if (gameFinished || gamePaused) return;
+    gamePaused = true;
+    resetJoystick();
+    if (spawnTimeout) {
+        spawnTimerRemaining = Math.max(0, spawnTimerRemaining - (Date.now() - spawnTimerStart));
+        clearTimeout(spawnTimeout);
+        spawnTimeout = null;
+    }
+    pausePanel.style.display = "flex";
+});
+
+/* ================= IR AL MENU DESDE PAUSA ================= */
+
+pauseMenuButton.addEventListener("click", async () => {
+    await volverOrientacionMenu();
+    gamePaused = false;
+    gameFinished = true;
+
+    clearTimeout(spawnTimeout);
+    spawnTimeout = null;
+    spawnTimerRemaining = 0;
+
+    enemies.forEach(enemy => {
+        clearTimeout(enemy.damageTimer);
+        clearTimeout(enemy.cooldownTimer);
+        if (enemy.element.parentNode) enemy.element.remove();
+    });
+
+    enemies = [];
+    resetJoystick();
+
+    pausePanel.style.display = "none";
+    game.style.display = "none";
+    menu.style.display = "block";
+});
+
+/* ================= REANUDAR ================= */
+
+resumeButton.addEventListener("click", () => {
+    gamePaused = false;
+    pausePanel.style.display = "none";
+    if (!gameFinished) {
+        if (spawnTimerRemaining > 0) {
+            spawnTimerStart = Date.now();
+            spawnTimeout = setTimeout(() => {
+                spawnEnemy();
+                programarSpawn(2000, 4000);
+            }, spawnTimerRemaining);
+        } else {
+            programarSpawn(2000, 4000);
+        }
+    }
+});
+
+</script>
+
+
+<script type="module">
+/* ================= FIREBASE / CUENTA GOOGLE =================
+   Firebase funciona como una capa independiente del guardado local.
+   NO modifica SAVE_KEY, saveGame(), loadGame() ni la estructura
+   de ARENAS_SAVE_V1.
+*/
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+import {
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+    onAuthStateChanged,
+    signOut
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+import {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyAR6J77oGBm0EwwYELllW4nfo09LRpTJWs",
+    authDomain: "arena-s-dev.firebaseapp.com",
+    projectId: "arena-s-dev",
+    storageBucket: "arena-s-dev.firebasestorage.app",
+    messagingSenderId: "629965962732",
+    appId: "1:629965962732:web:6389dd56ecae5fd61354c9",
+    measurementId: "G-3V7GCQ55PH"
+};
+
+const firebaseApp = initializeApp(firebaseConfig);
+const firebaseAuth = getAuth(firebaseApp);
+const firebaseDB = getFirestore(firebaseApp);
+const googleProvider = new GoogleAuthProvider();
+
+const firebaseSignInButton =
+    document.getElementById("firebase-signin-button");
+const firebaseLoginButton =
+    document.getElementById("firebase-login-button");
+const firebaseCloudRestoreButton =
+    document.getElementById("firebase-cloud-restore-button");
+const firebaseSignoutButton =
+    document.getElementById("firebase-signout-button");
+const firebaseAccountStatus =
+    document.getElementById("firebase-account-status");
+
+const FIREBASE_MAIN_SAVE_KEY = "ARENAS_SAVE_V1";
+const FIREBASE_SEASON_SAVE_KEY = "ARENAS_SEASON_V1";
+const FIREBASE_LANGUAGE_KEY = "ARENAS_LANGUAGE_V1";
+
+let firebaseCurrentUser = null;
+let firebaseCloudExists = false;
+let firebaseAutoSaveLastSnapshot = null;
+let firebaseAutoSaveTimer = null;
+let firebaseAutoSaveInProgress = false;
+let firebaseAutoSaveInterval = null;
+let firebaseLoginRestoreInProgress = false;
+
+function firebaseText(es, en) {
+    const language =
+        localStorage.getItem(FIREBASE_LANGUAGE_KEY) === "en"
+            ? "en"
+            : "es";
+
+    return language === "en" ? en : es;
+}
+
+function setFirebaseStatus(es, en) {
+    firebaseAccountStatus.textContent =
+        firebaseText(es, en);
+}
+
+function readLocalProgress() {
+    let mainSave = null;
+    let seasonSave = null;
+    let language = localStorage.getItem(FIREBASE_LANGUAGE_KEY) || "es";
+
+    try {
+        const rawMain =
+            localStorage.getItem(FIREBASE_MAIN_SAVE_KEY);
+
+        if (rawMain) {
+            mainSave = JSON.parse(rawMain);
+        }
+    } catch (error) {
+        console.warn(
+            "Firebase no pudo leer el guardado local principal.",
+            error
+        );
+    }
+
+    try {
+        const rawSeason =
+            localStorage.getItem(FIREBASE_SEASON_SAVE_KEY);
+
+        if (rawSeason) {
+            seasonSave = JSON.parse(rawSeason);
+        }
+    } catch (error) {
+        console.warn(
+            "Firebase no pudo leer el guardado local de temporada.",
+            error
+        );
+    }
+
+    return {
+        mainSave,
+        seasonSave,
+        language
+    };
+}
+
+function getLocalProgressSnapshot() {
+    try {
+        return JSON.stringify(readLocalProgress());
+    } catch (error) {
+        console.warn(
+            "Firebase no pudo comparar el progreso local.",
+            error
+        );
+        return null;
+    }
+}
+
+async function saveProgressToCloud(silent = false) {
+    if (!firebaseCurrentUser || firebaseAutoSaveInProgress) {
+        return false;
+    }
+
+    firebaseAutoSaveInProgress = true;
+
+    try {
+        const progress = readLocalProgress();
+        const snapshot = JSON.stringify(progress);
+
+        await setDoc(
+            doc(
+                firebaseDB,
+                "players",
+                firebaseCurrentUser.uid
+            ),
+            {
+                mainSave: progress.mainSave,
+                seasonSave: progress.seasonSave,
+                language: progress.language,
+                updatedAt: serverTimestamp()
+            }
+        );
+
+        firebaseCloudExists = true;
+        firebaseAutoSaveLastSnapshot = snapshot;
+
+        if (!silent) {
+            setFirebaseStatus(
+                "Progreso guardado automáticamente.",
+                "Progress saved automatically."
+            );
+        }
+
+        return true;
+
+    } catch (error) {
+        console.error(
+            "No se pudo guardar automáticamente el progreso en Firestore.",
+            error
+        );
+
+        if (!silent) {
+            setFirebaseStatus(
+                "No se pudo guardar automáticamente. Revisá tu conexión.",
+                "Automatic save failed. Check your connection."
+            );
+        }
+
+        return false;
+
+    } finally {
+        firebaseAutoSaveInProgress = false;
+    }
+}
+
+function scheduleAutomaticCloudSave() {
+    if (!firebaseCurrentUser) {
+        return;
+    }
+
+    if (firebaseAutoSaveTimer) {
+        clearTimeout(firebaseAutoSaveTimer);
+    }
+
+    firebaseAutoSaveTimer = setTimeout(
+        async () => {
+            firebaseAutoSaveTimer = null;
+
+            const currentSnapshot =
+                getLocalProgressSnapshot();
+
+            if (!currentSnapshot) {
+                return;
+            }
+
+            if (
+                currentSnapshot ===
+                firebaseAutoSaveLastSnapshot
+            ) {
+                return;
+            }
+
+            await saveProgressToCloud();
+        },
+        800
+    );
+}
+
+function startAutomaticCloudSaveWatcher() {
+    if (firebaseAutoSaveInterval) {
+        clearInterval(firebaseAutoSaveInterval);
+    }
+
+    firebaseAutoSaveInterval = setInterval(
+        () => {
+            if (!firebaseCurrentUser) {
+                return;
+            }
+
+            const currentSnapshot =
+                getLocalProgressSnapshot();
+
+            if (!currentSnapshot) {
+                return;
+            }
+
+            if (
+                firebaseAutoSaveLastSnapshot === null
+            ) {
+                firebaseAutoSaveLastSnapshot = currentSnapshot;
+                return;
+            }
+
+            if (
+                currentSnapshot !==
+                firebaseAutoSaveLastSnapshot
+            ) {
+                scheduleAutomaticCloudSave();
+            }
+        },
+        1000
+    );
+}
+
+function stopAutomaticCloudSaveWatcher() {
+    if (firebaseAutoSaveInterval) {
+        clearInterval(firebaseAutoSaveInterval);
+        firebaseAutoSaveInterval = null;
+    }
+
+    if (firebaseAutoSaveTimer) {
+        clearTimeout(firebaseAutoSaveTimer);
+        firebaseAutoSaveTimer = null;
+    }
+
+    firebaseAutoSaveLastSnapshot = null;
+    firebaseAutoSaveInProgress = false;
+}
+
+async function restoreProgressFromCloud() {
+    if (!firebaseCurrentUser) {
+        setFirebaseStatus(
+            "Primero vinculá tu cuenta de Google.",
+            "First link your Google account."
+        );
+        return;
+    }
+
+    if (
+        !confirm(
+            firebaseText(
+                "Esto reemplazará el progreso local de este dispositivo por la copia de la nube. ¿Continuar?",
+                "This will replace this device's local progress with the cloud copy. Continue?"
+            )
+        )
+    ) {
+        return;
+    }
+
+    try {
+        const snapshot =
+            await getDoc(
+                doc(
+                    firebaseDB,
+                    "players",
+                    firebaseCurrentUser.uid
+                )
+            );
+
+        if (!snapshot.exists()) {
+            setFirebaseStatus(
+                "Todavía no existe una copia de progreso en la nube.",
+                "There is no cloud progress copy yet."
+            );
+            firebaseCloudExists = false;
+            firebaseCloudRestoreButton.style.display = "none";
+            return;
+        }
+
+        const cloudData = snapshot.data();
+
+        if (cloudData.mainSave) {
+            localStorage.setItem(
+                FIREBASE_MAIN_SAVE_KEY,
+                JSON.stringify(cloudData.mainSave)
+            );
+        }
+
+        if (cloudData.seasonSave) {
+            localStorage.setItem(
+                FIREBASE_SEASON_SAVE_KEY,
+                JSON.stringify(cloudData.seasonSave)
+            );
+        }
+
+        if (
+            cloudData.language === "en" ||
+            cloudData.language === "es"
+        ) {
+            localStorage.setItem(
+                FIREBASE_LANGUAGE_KEY,
+                cloudData.language
+            );
+        }
+
+        setFirebaseStatus(
+            "Progreso restaurado. ARENA'S se reiniciará.",
+            "Progress restored. ARENA'S will restart."
+        );
+
+        setTimeout(() => {
+            location.reload();
+        }, 900);
+
+    } catch (error) {
+        console.error(
+            "No se pudo restaurar el progreso desde Firestore.",
+            error
+        );
+
+        setFirebaseStatus(
+            "No se pudo restaurar. Revisá las reglas de Firestore.",
+            "Could not restore. Check your Firestore rules."
+        );
+    }
+}
+
+async function refreshCloudAvailability() {
+    if (!firebaseCurrentUser) {
+        firebaseCloudExists = false;
+        firebaseCloudRestoreButton.style.display = "none";
+        return;
+    }
+
+    try {
+        const snapshot =
+            await getDoc(
+                doc(
+                    firebaseDB,
+                    "players",
+                    firebaseCurrentUser.uid
+                )
+            );
+
+        firebaseCloudExists = snapshot.exists();
+
+        firebaseCloudRestoreButton.style.display =
+            firebaseCloudExists ? "block" : "none";
+
+    } catch (error) {
+        console.warn(
+            "No se pudo comprobar la copia de Firestore.",
+            error
+        );
+
+        firebaseCloudRestoreButton.style.display = "none";
+    }
+}
+
+firebaseSignInButton.addEventListener(
+    "click",
+    async () => {
+
+        try {
+            firebaseSignInButton.disabled = true;
+
+            const result =
+                await signInWithPopup(
+                    firebaseAuth,
+                    googleProvider
+                );
+
+            firebaseCurrentUser = result.user;
+
+            setFirebaseStatus(
+                "Cuenta vinculada: " + (result.user.email || "") + " · Guardado automático activo",
+                "Account linked: " + (result.user.email || "") + " · Automatic saving active"
+            );
+
+            await refreshCloudAvailability();
+
+            firebaseAutoSaveLastSnapshot =
+                getLocalProgressSnapshot();
+
+            if (!firebaseCloudExists) {
+                await saveProgressToCloud(true);
+            }
+
+        } catch (error) {
+            console.error(
+                "Error al iniciar sesión con Google.",
+                error
+            );
+
+            if (error.code === "auth/popup-closed-by-user") {
+                setFirebaseStatus(
+                    "Inicio de sesión cancelado.",
+                    "Sign-in cancelled."
+                );
+            } else if (error.code === "auth/unauthorized-domain") {
+                setFirebaseStatus(
+                    "Este dominio todavía no está autorizado en Firebase.",
+                    "This domain is not authorized in Firebase yet."
+                );
+            } else {
+                setFirebaseStatus(
+                    "No se pudo iniciar sesión con Google.",
+                    "Could not sign in with Google."
+                );
+            }
+
+        } finally {
+            firebaseSignInButton.disabled = false;
+        }
+    }
+);
+
+firebaseLoginButton.addEventListener(
+    "click",
+    async () => {
+
+        try {
+            firebaseLoginButton.disabled = true;
+            firebaseLoginRestoreInProgress = true;
+
+            googleProvider.setCustomParameters({
+                prompt: "select_account"
+            });
+
+            const result =
+                await signInWithPopup(
+                    firebaseAuth,
+                    googleProvider
+                );
+
+            firebaseCurrentUser = result.user;
+
+            const snapshot =
+                await getDoc(
+                    doc(
+                        firebaseDB,
+                        "players",
+                        result.user.uid
+                    )
+                );
+
+            if (!snapshot.exists()) {
+                setFirebaseStatus(
+                    "Esta cuenta de Google no tiene una cuenta de ARENA'S vinculada.",
+                    "This Google account does not have an ARENA'S account linked to it."
+                );
+
+                await signOut(firebaseAuth);
+                return;
+            }
+
+            const confirmed =
+                confirm(
+                    firebaseText(
+                        "Se encontró tu cuenta de ARENA'S en la nube. Al entrar, se reemplazará el progreso local de este dispositivo por ese progreso. ¿Continuar?",
+                        "Your ARENA'S account was found in the cloud. Signing in will replace this device's local progress with that progress. Continue?"
+                    )
+                );
+
+            if (!confirmed) {
+                await signOut(firebaseAuth);
+                return;
+            }
+
+            const cloudData = snapshot.data();
+
+            if (cloudData.mainSave) {
+                localStorage.setItem(
+                    FIREBASE_MAIN_SAVE_KEY,
+                    JSON.stringify(cloudData.mainSave)
+                );
+            }
+
+            if (cloudData.seasonSave) {
+                localStorage.setItem(
+                    FIREBASE_SEASON_SAVE_KEY,
+                    JSON.stringify(cloudData.seasonSave)
+                );
+            }
+
+            if (
+                cloudData.language === "en" ||
+                cloudData.language === "es"
+            ) {
+                localStorage.setItem(
+                    FIREBASE_LANGUAGE_KEY,
+                    cloudData.language
+                );
+            }
+
+            firebaseCloudExists = true;
+            firebaseAutoSaveLastSnapshot =
+                getLocalProgressSnapshot();
+
+            setFirebaseStatus(
+                "Sesión iniciada. ARENA'S se reiniciará con tu progreso.",
+                "Signed in. ARENA'S will restart with your progress."
+            );
+
+            setTimeout(() => {
+                location.reload();
+            }, 900);
+
+        } catch (error) {
+            console.error(
+                "Error al iniciar sesión en ARENA'S con Google.",
+                error
+            );
+
+            if (error.code === "auth/popup-closed-by-user") {
+                setFirebaseStatus(
+                    "Inicio de sesión cancelado.",
+                    "Sign-in cancelled."
+                );
+            } else if (error.code === "auth/unauthorized-domain") {
+                setFirebaseStatus(
+                    "Este dominio todavía no está autorizado en Firebase.",
+                    "This domain is not authorized in Firebase yet."
+                );
+            } else {
+                setFirebaseStatus(
+                    "No se pudo iniciar sesión en ARENA'S.",
+                    "Could not sign in to ARENA'S."
+                );
+            }
+
+        } finally {
+            firebaseLoginRestoreInProgress = false;
+            firebaseLoginButton.disabled = false;
+        }
+    }
+);
+
+firebaseCloudRestoreButton.addEventListener(
+    "click",
+    restoreProgressFromCloud
+);
+
+firebaseSignoutButton.addEventListener(
+    "click",
+    async () => {
+        try {
+            await signOut(firebaseAuth);
+        } catch (error) {
+            console.error(
+                "No se pudo cerrar la sesión de Google.",
+                error
+            );
+        }
+    }
+);
+
+onAuthStateChanged(
+    firebaseAuth,
+    async user => {
+
+        firebaseCurrentUser = user;
+
+        if (!user) {
+            stopAutomaticCloudSaveWatcher();
+            firebaseSignInButton.style.display = "block";
+            firebaseLoginButton.style.display = "block";
+            firebaseCloudRestoreButton.style.display = "none";
+            firebaseSignoutButton.style.display = "none";
+            firebaseAccountStatus.textContent = "";
+            return;
+        }
+
+        firebaseSignInButton.style.display = "none";
+        firebaseLoginButton.style.display = "none";
+        firebaseSignoutButton.style.display = "block";
+
+        setFirebaseStatus(
+            "Cuenta vinculada: " + (user.email || "") + " · Guardado automático activo",
+            "Account linked: " + (user.email || "") + " · Automatic saving active"
+        );
+
+        await refreshCloudAvailability();
+
+        firebaseAutoSaveLastSnapshot =
+            getLocalProgressSnapshot();
+
+        if (!firebaseCloudExists) {
+            await saveProgressToCloud(true);
+        }
+
+        if (!firebaseLoginRestoreInProgress) {
+            startAutomaticCloudSaveWatcher();
+        }
+    }
+);
+</script>
+
+</body>
+</html>
